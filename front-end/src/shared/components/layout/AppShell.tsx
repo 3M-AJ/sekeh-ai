@@ -7,6 +7,7 @@ import type { AppShellProps } from "./types";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileNavigation from "./MobileNavigation";
 import Title from "@/shared/components/ui/MainTitle";
+import { ThemeToggle } from "@/shared/theme";
 
 export default function AppShell({ items, footer }: AppShellProps) {
 	return (
@@ -16,6 +17,7 @@ export default function AppShell({ items, footer }: AppShellProps) {
 				<header className="bg-background md:pe-5 max-md:px-3 flex h-(--navbar-height) shrink-0 items-center max-md:gap-7">
 					<MobileNavigation items={items} footer={footer} />
 					<Title mianColor="accent" subColor="primary-text" />
+					<ThemeToggle className="ms-auto" />
 				</header>
 				<main className="h-(--full-outlet-height) overflow-x-hidden overflow-y-auto">
 					<Outlet />

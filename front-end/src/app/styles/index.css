@@ -3,9 +3,16 @@
 @import "./components.css";
 @import "../../assets/styles/fonts.css";
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *:not(.light, .light *)));
 
 :root {
 	--navbar-height: 68px;
 	--full-outlet-height: calc(100dvh - var(--navbar-height));
+}
+
+html,
+body,
+#root {
+	background-color: var(--color-background);
+	color: var(--color-primary-text);
 }

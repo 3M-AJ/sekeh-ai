@@ -36,7 +36,7 @@ export default function ChatPage() {
 				<Link
 					to="/chats"
 					className="group flex items-center justify-center gap-1 rounded-lg border-2 border-primary-action bg-surface px-3 py-0.5 transition-all duration-150 hover:bg-primary-action">
-					<p className="text-[14px] font-semibold text-primary-action transition-all duration-150 group-hover:text-surface">
+					<p className="text-[14px] font-semibold text-primary-action transition-all duration-150 group-hover:text-background">
 						بازگشت
 					</p>
 				</Link>

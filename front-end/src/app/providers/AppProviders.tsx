@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type PropsWithChildren } from "react";
 import { BrowserRouter } from "react-router";
+import { ThemeProvider } from "@/shared/theme";
 
 export default function AppProviders({ children }: PropsWithChildren) {
 	const [queryClient] = useState(
@@ -17,7 +18,9 @@ export default function AppProviders({ children }: PropsWithChildren) {
 
 	return (
 		<BrowserRouter basename={import.meta.env.VITE_BASE_FRONT_URL}>
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider>{children}</ThemeProvider>
+			</QueryClientProvider>
 		</BrowserRouter>
 	);
 }

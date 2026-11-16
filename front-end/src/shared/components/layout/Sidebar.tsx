@@ -25,12 +25,12 @@ export default function Sidebar({ items, footer }: SidebarProps) {
 						id={`${path}-icon`}>
 						<Icon
 							className={`md:size-5 max-md:size-6 ${
-								isThisPage ? "text-background" : "text-primary-action"
+								isThisPage ? "text-on-accent" : "text-primary-action"
 							}`}
 						/>
 						<span
 							className={`font-semibold ${
-								isThisPage ? "text-background" : "text-primary-text"
+								isThisPage ? "text-on-accent" : "text-primary-text"
 							}`}>
 							{label}
 						</span>

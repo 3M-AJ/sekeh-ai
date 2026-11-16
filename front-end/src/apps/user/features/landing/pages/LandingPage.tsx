@@ -19,6 +19,7 @@ import { landingAPI } from "@/apps/user/features/landing/service/landingService"
 
 // Components
 import Title from "@/shared/components/ui/MainTitle";
+import { ThemeToggle } from "@/shared/theme";
 
 // Hooks
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
@@ -52,17 +53,20 @@ export default function LandingPage() {
 	return (
 		<div className="bg-surface min-h-screen" id="landing-container">
 			{/* Header */}
-			<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 border-b border-border px-4 md:px-8 py-4 flex items-center justify-between">
-				<button
-					className="bg-accent text-white md:px-6 md:py-2.5 rounded-full text-sm font-medium
+			<header className="bg-background/80 backdrop-blur-sm sticky top-0 z-50 border-b border-border px-4 md:px-8 py-4 flex items-center justify-between gap-3">
+				<div className="flex items-center gap-2">
+					<button
+						className="bg-accent text-white md:px-6 md:py-2.5 rounded-full text-sm font-medium
           hover:bg-accent-hover transition-all duration-300 hover:scale-105 hover:shadow-lg
           flex items-center gap-2 cursor-pointer max-md:size-8 max-md:justify-center"
-					onClick={handleDirectPage}>
-					<MessageCircle size={18} />
-					<span className="max-md:hidden">
-						{landingContent.hero.secondary_cta}
-					</span>
-				</button>
+						onClick={handleDirectPage}>
+						<MessageCircle size={18} />
+						<span className="max-md:hidden">
+							{landingContent.hero.secondary_cta}
+						</span>
+					</button>
+					<ThemeToggle />
+				</div>
 
 				<Title subColor="primary-text" mianColor="accent" />
 			</header>
