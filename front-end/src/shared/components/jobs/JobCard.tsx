@@ -1,11 +1,21 @@
 import { useState } from "react";
-import MatchCircle from "@/shared/components/jobs/MatchCircle";
-import type { Job } from "@/features/chat/api/chatApi";
 import { Bookmark } from "lucide-react";
-import { MarkAPI } from "@/features/marks/api/marksApi";
-import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
-import { toast } from "@/shared/lib/toast";
 import { useQueryClient } from "@tanstack/react-query";
+
+// Types
+import type { Job } from "@/shared/types";
+
+// Services
+import { MarkAPI } from "@/apps/user/features/marks/service/marksService";
+
+// Components
+import MatchCircle from "@/shared/components/jobs/MatchCircle";
+
+// Hooks
+import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
+
+// Utils
+import { toast } from "@/shared/lib/toast";
 
 interface JobCardProps extends Job {
 	bookmarked?: boolean;

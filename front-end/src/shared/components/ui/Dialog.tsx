@@ -1,8 +1,14 @@
 import { useCallback, useEffect, useId, useMemo, type ReactNode } from "react";
 import { X } from "lucide-react";
+
+// Components
 import Button from "@/shared/components/ui/Button";
-import { cn } from "@/shared/lib/cn";
+
+// Hooks
 import { useDialogContext } from "@/app/contexts/useDialogContext";
+
+// Utils
+import { cn } from "@/shared/lib/cn";
 
 export interface DialogProps {
 	trigger?: ReactNode;

@@ -5,8 +5,12 @@ import {
 	type UseMutationOptions,
 	type UseMutationResult,
 } from "@tanstack/react-query";
-import type { Exceptions } from "@/shared/api/client";
 import type { AxiosError } from "axios";
+
+// Types
+import type { Exceptions } from "@/shared/api/client";
+
+// Utils
 import { toast } from "@/shared/lib/toast";
 
 export function useCustomMutation<
