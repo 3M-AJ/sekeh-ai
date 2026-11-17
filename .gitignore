@@ -1,0 +1,3 @@
+node_modules/
+.cursor/
+scripts/.local-pg-setup-status.txt
