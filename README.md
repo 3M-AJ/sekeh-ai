@@ -75,25 +75,27 @@ sequenceDiagram
 
 | قابلیت | توضیح | محل مرتبط | وضعیت |
 |--------|--------|-----------|--------|
-| ثبت‌نام و ورود JWT | ثبت‌نام با نام‌کاربری و رمز؛ ورود و دریافت access/refresh | `front-end/src/features/auth`، `backend-end/chat_api/routes/auth.py` | پیاده‌سازی شده |
-| تمدید و خروج توکن | Refresh روی 401؛ Logout با blocklist | `client.ts`، `auth.py`، `TokenBlocklist` | پیاده‌سازی شده |
-| پروفایل کاربر | مشاهده، ویرایش، تغییر رمز، حذف حساب | `features/profile`، `routes/users.py` | پیاده‌سازی شده |
-| مدیریت چت | ایجاد، فهرست، حذف، تغییر عنوان | `features/chat`، `routes/chat.py` | پیاده‌سازی شده |
+| ثبت‌نام و ورود JWT | ثبت‌نام با نام‌کاربری و رمز؛ ورود و دریافت access/refresh | `apps/user/features/auth`، `backend-end/chat_api/routes/auth.py` | پیاده‌سازی شده |
+| تمدید و خروج توکن | Refresh روی 401؛ Logout با blocklist | `shared/api/client.ts`، `auth.py`، `TokenBlocklist` | پیاده‌سازی شده |
+| پروفایل کاربر | مشاهده، ویرایش، تغییر رمز، حذف حساب | `apps/user/features/profile`، `routes/users.py` | پیاده‌سازی شده |
+| مدیریت چت | ایجاد، فهرست، حذف، تغییر عنوان | `apps/user/features/chat`، `routes/chat.py` | پیاده‌سازی شده |
 | گفتگوی SSE | ارسال پیام و دریافت پاسخ به‌صورت رویداد SSE | `useChatStream.ts`، `routes/message.py` | پیاده‌سازی شده (استریم واقعی LLM ناقص است؛ متن پس از پاسخ کامل تکه‌تکه می‌شود) |
-| رزومه متنی | CRUD عنوان و محتوای متنی (بدون آپلود فایل) | `features/resume`، `routes/resume.py` | پیاده‌سازی شده |
+| رزومه متنی | CRUD عنوان و محتوای متنی (بدون آپلود فایل) | `apps/user/features/resume`، `routes/resume.py` | پیاده‌سازی شده |
 | انتخاب رزومه در چت | درج محتوای رزومه در ورودی پیام | `ResumePickerDialog` | پیاده‌سازی شده |
-| بوک‌مارک آگهی | افزودن/حذف و فهرست بوک‌مارک‌ها | `features/marks`، `routes/bookmark.py` | پیاده‌سازی شده |
-| پنل ادمین | آمار، کاربران، آگهی‌ها (ویرایش/حذف) | `features/admin`، `routes/admin.py` | پیاده‌سازی شده |
-| صفحه فرود پویا | محتوای فارسی + آمار زنده از API | `features/landing`، `routes/landing.py` | پیاده‌سازی شده |
-| تماس با ما | صفحه ایستا (بدون فرم/API) | `features/contact` | پیاده‌سازی شده (ایستا) |
+| بوک‌مارک آگهی | افزودن/حذف و فهرست بوک‌مارک‌ها | `apps/user/features/marks`، `routes/bookmark.py` | پیاده‌سازی شده |
+| پنل ادمین | آمار، کاربران، آگهی‌ها (ویرایش/حذف) | `apps/admin/features/*`، `routes/admin.py` | پیاده‌سازی شده |
+| صفحه فرود | محتوای لندینگ از API + رابط چندزبانه | `apps/user/features/landing`، `routes/landing.py` | پیاده‌سازی شده |
+| تماس با ما | صفحه ایستا (بدون فرم/API) | `apps/user/features/contact` | پیاده‌سازی شده (ایستا) |
+| حالت تاریک/روشن | Theme با ذخیره در localStorage و اسکریپت اولیه | `shared/theme`، `public/theme-init.js` | پیاده‌سازی شده |
+| چندزبانه (fa/en) | i18next + سوییچر زبان و جهت RTL/LTR | `shared/i18n`، `apps/*/i18n` | پیاده‌سازی شده |
 | تشخیص قصد پیام | مسیر CHAT در برابر ANALYZE | `intent_classifier.py` | پیاده‌سازی ناقص (وابسته به LLM خارجی؛ در خطا به heuristic برمی‌گردد) |
 | تطابق شغل و گزارش | Embedding رزومه، امتیازدهی، کارت شغل، گزارش LLM | `resume_report.py`، `job_scoring.py`، `embeddings.py`، `qom_llm.py` | پیاده‌سازی ناقص (بدون زیرساخت عملیاتی کامل AI؛ جزئیات در بخش ۹) |
 | آپلود فایل رزومه | — | — | پیاده‌سازی نشده |
 | صفحه مستقل Matching | تطابق فقط از مسیر چت | — | پیاده‌سازی نشده |
 | خزنده/واردکننده آگهی | پر کردن جدول `jobs` و Embeddingها | — | پیاده‌سازی نشده |
-| لایک/دیسلایک پیام | UI فقط `console.log` | `ChatMessage.tsx` | پیاده‌سازی ناقص |
-| تکمیل ثبت‌نام با ورود خودکار | پس از signup بدون ذخیره توکن به `/chats` می‌رود | `SignupPage.tsx` | پیاده‌سازی ناقص |
-| جستجوی برداری ANN در SQL | استفاده از عملگرهای فاصله pgvector / IVFFlat / HNSW | `job_scoring.py` | پیاده‌سازی نشده (بارگذاری همه ردیف‌ها + cosine در Python) |
+| لایک/دیسلایک پیام | UI فقط `console.log` | کامپوننت پیام چت | پیاده‌سازی ناقص |
+| تکمیل ثبت‌نام با ورود خودکار | پس از signup ممکن است بدون ذخیره توکن به مسیر محافظت‌شده برود | `SignupPage` | پیاده‌سازی ناقص |
+| جستجوی برداری ANN در SQL | عملگرهای فاصله pgvector / IVFFlat / HNSW | `job_scoring.py` | پیاده‌سازی نشده (بارگذاری همه ردیف‌ها + cosine در Python) |
 
 ---
 
@@ -107,10 +109,11 @@ sequenceDiagram
 | TypeScript | ~5.9.3 | تایپ‌استاتیک |
 | Vite | ^7.2.2 | توسعه و بیلد |
 | React Router | ^7.9.6 | مسیریابی SPA با `basename` |
-| Tailwind CSS | ^4.1.17 | استایل RTL |
+| Tailwind CSS | ^4.1.17 | استایل (پشتیبانی RTL/LTR) |
 | TanStack Query | ^5.90.21 | state سمت سرور و کش |
 | Axios | ^1.13.5 | REST (به‌جز SSE چت) |
 | Zustand | ^5.0.14 | نگهداری پروفایل در حافظه |
+| i18next / react-i18next | ^27.1.3 / ^18.0.2 | چندزبانه فارسی/انگلیسی |
 | Framer Motion / GSAP | وابستگی‌های موجود | انیمیشن |
 | react-markdown | ^10.1.0 | رندر پیام‌های چت |
 | Vitest / ESLint | موجود | تست واحد محدود و lint |
@@ -154,7 +157,10 @@ sequenceDiagram
 
 | ابزار | محل |
 |--------|------|
+| Root `npm run dev` | `package.json` ریشه + `concurrently` |
 | npm + Vite | `front-end/` |
+| اسکریپت بک‌اند محلی | `scripts/dev-backend.mjs` |
+| کمک‌راه‌انداز Postgres (ویندوز) | `scripts/setup-local-postgres.ps1`، `scripts/install-pgvector-and-secure.ps1` |
 | GitHub Actions Pages | `.github/workflows/deploy.yml` |
 | Gunicorn | اشاره در `Procfile` (در `requirements.txt` نیست) |
 | Flasgger | معمولاً مسیر `/apidocs/` |
@@ -163,17 +169,19 @@ sequenceDiagram
 
 ## ۴. معماری پروژه
 
-پروژه یک monorepo ساده با دو بخش مستقل است:
+پروژه یک monorepo ساده با دو بخش اصلی است:
 
-- `front-end/`: SPA استاتیک (React + Vite)
+- `front-end/`: SPA (React + Vite) با دو زیربرنامه `user` و `admin`
 - `backend-end/`: REST API + SSE (Flask)
 
-فرانت‌اند و بک‌اند جدا اجرا می‌شوند. فرانت از طریق `VITE_API_URL` به API متصل می‌شود.
+در ریشه مخزن می‌توان با `npm run dev` هر دو را هم‌زمان اجرا کرد؛ همچنان امکان اجرای جداگانه نیز وجود دارد. فرانت از طریق `VITE_API_URL` به API متصل می‌شود.
 
 ```mermaid
 flowchart TB
   subgraph client [Frontend]
-    UI[React_Features]
+    UserApp[apps_user]
+    AdminApp[apps_admin]
+    Shared[shared_api_i18n_theme]
     RQ[TanStack_Query]
     AX[Axios_Client]
     SSE[Fetch_SSE_Chat]
@@ -191,9 +199,11 @@ flowchart TB
     EMB[External_Embed_API]
   end
 
-  UI --> RQ
-  UI --> AX
-  UI --> SSE
+  UserApp --> Shared
+  AdminApp --> Shared
+  Shared --> RQ
+  Shared --> AX
+  UserApp --> SSE
   AX --> BP
   SSE --> BP
   BP --> SVC
@@ -205,13 +215,16 @@ flowchart TB
 
 ### معماری Frontend
 
-ساختار feature-based:
+فرانت‌اند به دو اپلیکیشن منطقی تقسیم شده است:
 
-- `src/app`: Router، Providerها، استایل سراسری
-- `src/features/*`: دامنه محصول (auth، chat، resume، marks، profile، admin، landing، contact)
-- `src/shared`: کلاینت HTTP، کامپوننت‌های مشترک، هوک‌ها، ابزارها
+| بخش | مسیر | مسئولیت |
+|------|------|----------|
+| User app | `src/apps/user/` | لندینگ، احراز هویت، چت، رزومه، بوک‌مارک، پروفایل، تماس |
+| Admin app | `src/apps/admin/` | داشبورد، کاربران، آگهی‌ها |
+| Shared | `src/shared/` | کلاینت API، UI، theme، i18n، هوک‌ها، storage |
+| App shell | `src/app/` | Providerها، استایل سراسری، bootstrap i18n |
 
-مسیرها در `AppRouter.tsx` تعریف شده‌اند. اکثر صفحات lazy-load هستند. مسیرهای داخل `AppLayout` نیازمند توکن در `localStorage` هستند. مسیرهای `/admin/*` نیازمند `profile.role === "admin"` هستند.
+مسیرهای کاربر زیر `UserLayout` و مسیرهای ادمین زیر `AdminLayout` قرار دارند. پوسته مشترک ناوبری در `AppShell` است. مسیرهای محافظت‌شده نیازمند توکن در `localStorage` (با پیشوند `VITE_STORAGE_PREFIX`) هستند. مسیرهای `/admin/*` نیازمند `profile.role === "admin"` هستند.
 
 ### معماری Backend
 
@@ -252,41 +265,47 @@ flowchart TD
 
 ```text
 sekeh-ai/
+├── package.json                   # npm run dev برای اجرای هم‌زمان
+├── scripts/
+│   ├── dev-backend.mjs
+│   ├── setup-local-postgres.ps1
+│   └── install-pgvector-and-secure.ps1
 ├── .github/workflows/deploy.yml   # بیلد front-end و استقرار GitHub Pages
-├── README.md                      # همین سند
+├── README.md
 ├── front-end/
 │   ├── package.json
 │   ├── vite.config.ts
 │   ├── .env / .env.development / .env.production
-│   ├── public/
-│   ├── README.md                  # قراردادهای فرانت‌اند
+│   ├── public/                    # شامل theme-init.js
 │   └── src/
 │       ├── main.tsx
-│       ├── app/                   # Router، Providers، styles
-│       ├── features/              # auth, chat, resume, marks, profile, admin, landing, contact
-│       └── shared/                # api client، UI، hooks، lib
+│       ├── app/                   # Providers، styles، i18n bootstrap
+│       ├── apps/
+│       │   ├── user/              # features، layouts، router، i18n
+│       │   └── admin/             # features، layouts، router، i18n
+│       ├── shared/                # api، components، theme، i18n، hooks، lib
+│       └── assets/
 └── backend-end/
-    ├── app.py                     # نقطه ورود WSGI
-    ├── config.py                  # خواندن متغیرهای محیطی
+    ├── app.py
+    ├── config.py
     ├── requirements.txt
     ├── Procfile
-    ├── README.md                  # مستندات انگلیسی بک‌اند (برخی جزئیات با کد هم‌خوان نیست)
-    ├── tests/                     # اسکریپت‌های دستی دود و اتصال DB
+    ├── tests/
     └── chat_api/
-        ├── __init__.py            # create_app
+        ├── __init__.py
         ├── extensions.py
         ├── models/
         ├── routes/
         ├── service/
         ├── utils/
-        └── docs/                  # YAMLهای Flasgger
+        └── docs/
 ```
 
 ---
 
 ## ۶. نصب و اجرای محلی
 
-فرانت‌اند و بک‌اند **جداگانه** اجرا می‌شوند. فایل `.env.example` در مخزن وجود ندارد؛ متغیرهای لازم در ادامه فهرست شده‌اند. مقادیر محرمانه را Commit نکنید.
+فرانت‌اند و بک‌اند می‌توانند جدا یا با دستور ریشه هم‌زمان اجرا شوند. فایل `.env.example` در مخزن وجود ندارد؛ متغیرهای لازم در ادامه فهرست شده‌اند. مقادیر محرمانه را Commit نکنید.
 
 ### پیش‌نیازها
 
@@ -301,6 +320,27 @@ sekeh-ai/
 ```bash
 git clone https://github.com/smartsoftwarelab/sekeh-ai.git
 cd sekeh-ai
+```
+
+### وابستگی‌های ریشه (اجرای هم‌زمان)
+
+```bash
+npm install
+```
+
+سپس:
+
+```bash
+npm run dev
+```
+
+این دستور با `concurrently` بک‌اند (`scripts/dev-backend.mjs`) و فرانت (`front-end`) را با هم اجرا می‌کند.
+
+برای اجرای جداگانه:
+
+```bash
+npm run dev:frontend
+npm run dev:backend
 ```
 
 ### Backend
@@ -318,7 +358,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-یک فایل `.env` در `backend-end/` بسازید و حداقل این متغیرها را تنظیم کنید (مقادیر نمونه نیستند؛ باید توسط شما تأمین شوند):
+یک فایل `.env` در `backend-end/` بسازید و حداقل این متغیرها را تنظیم کنید (مقادیر باید توسط شما تأمین شوند):
 
 | متغیر | کاربرد |
 |--------|--------|
@@ -343,7 +383,7 @@ pip install -r requirements.txt
 > [!NOTE]
 > در `config.py` برای چند فیلد عددی از `int(...)` / `float(...)` روی مقدار env استفاده شده است. خالی بودن این متغیرها در زمان import باعث خطا می‌شود.
 
-اجرای توسعه:
+اجرای مستقیم توسعه:
 
 ```bash
 python app.py
@@ -351,13 +391,7 @@ python app.py
 
 سرور روی `0.0.0.0:5000` بالا می‌آید. در استارت‌آپ، افزونه `vector` و جداول با `db.create_all()` ساخته می‌شوند. **سیستم migration (مانند Alembic) وجود ندارد.**
 
-اجرای production-like (در صورت نصب جداگانه gunicorn):
-
-```bash
-gunicorn --bind 0.0.0.0:5000 app:app
-```
-
-مستندات تعاملی API پس از اجرا معمولاً از طریق Flasgger در مسیر `/apidocs/` در دسترس است.
+در ویندوز، اسکریپت‌های کمکی Postgres در `scripts/` موجودند؛ وابسته به نصب محلی PostgreSQL هستند و جایگزین Docker Compose نیستند.
 
 ### Frontend
 
@@ -371,8 +405,8 @@ npm install
 | فایل | متغیر | نقش |
 |------|--------|------|
 | `.env` | `VITE_API_URL` | پایه URL بک‌اند (با `/` انتهایی؛ کلاینت مسیر `api` را اضافه می‌کند) |
-| `.env.development` | `VITE_BASE_FRONT_URL` | مقدار `/` برای توسعه |
-| `.env.production` | `VITE_BASE_FRONT_URL` | مقدار `/sekeh-ai/` برای GitHub Pages |
+| `.env.development` / `.env.production` | `VITE_BASE_FRONT_URL` | `/` در توسعه؛ `/sekeh-ai/` برای GitHub Pages |
+| `.env.development` / `.env.production` | `VITE_STORAGE_PREFIX` | پیشوند کلیدهای localStorage (theme، language، tokens) |
 
 ```bash
 npm run dev
@@ -424,7 +458,7 @@ npm test
 | GET | `/api/chats/<chat_id>/messages` | Access (مالک) | فهرست پیام‌ها |
 | POST | `/api/chats/<chat_id>/messages` | Access (مالک) | ارسال پیام و پاسخ SSE |
 
-بدنه ارسال پیام: `{ "content": "..." }`. رویدادهای SSE شامل مواردی مانند `content`، `jobs` و `done` هستند (فرانت‌اند این‌ها را پردازش می‌کند).
+بدنه ارسال پیام: `{ "content": "..." }`. رویدادهای SSE شامل مواردی مانند `content`، `jobs` و `done` هستند.
 
 ### رزومه
 
@@ -559,7 +593,7 @@ erDiagram
 | `Bookmark` | `bookmarks` | ذخیره آگهی برای کاربر |
 | `TokenBlocklist` | `token_blocklist` | ابطال JWT |
 
-مالکیت داده: چت، رزومه و بوک‌مارک متعلق به کاربر است و با cascade مناسب حذف می‌شوند. جدول `jobs` و `companies` داده مرجع سامانه هستند؛ در این مخزن pipeline واردسازی آن‌ها وجود ندارد.
+مالکیت داده: چت، رزومه و بوک‌مارک متعلق به کاربر است. جدول `jobs` و `companies` داده مرجع سامانه هستند؛ در این مخزن pipeline واردسازی آن‌ها وجود ندارد.
 
 ---
 
@@ -612,7 +646,7 @@ erDiagram
 | CORS | پیش‌فرض شامل localhost و دامنه قدیمی Pages؛ برای دامنه جدید باید `CORS_ORIGINS` تنظیم شود |
 | اسرار | از env خوانده می‌شوند؛ `.env` در gitignore بک‌اند است |
 | اعتبارسنجی ورودی | اعتبارسنجی محدود سمت فرانت و بک‌اند؛ پوشش یکنواخت نیست |
-| توکن در فرانت | ذخیره در `localStorage` (در معرض XSS) |
+| توکن در فرانت | ذخیره در `localStorage` با پیشوند `VITE_STORAGE_PREFIX` (در معرض XSS) |
 | مسیر debug | `GET /api/_debug/cors` بدون احراز هویت |
 | Migration | ندارد؛ تغییر اسکیما در production پرریسک است |
 | Secrets در CI | workflow فعلی فقط فرانت را می‌سازد و secretهای LLM را مدیریت نمی‌کند |
@@ -625,10 +659,12 @@ erDiagram
 
 ### کارکردهای موجود و نسبتاً پایدار (غیر AI یا زیربنایی)
 
-- اسکلت SPA و مسیریابی RTL
+- اسکلت SPA با جداسازی `apps/user` و `apps/admin`
+- تم تاریک/روشن و چندزبانه fa/en
 - CRUD رزومه متنی، چت، بوک‌مارک، پروفایل
 - احراز هویت JWT و پنل ادمین پایه
 - لندینگ پویا و استقرار Pages برای فرانت
+- اجرای هم‌زمان محلی از ریشه با `npm run dev`
 
 ### ناقص / محدود
 
@@ -636,7 +672,6 @@ erDiagram
 - ثبت‌نام بدون login خودکار
 - لایک/دیسلایک پیام
 - پروفایل Zustand پس از رفرش تا زمان fetch خالی می‌ماند و گیت ادمین را تحت تأثیر قرار می‌دهد
-- عدم هماهنگی برخی بخش‌های `backend-end/README.md` با کد (مثلاً مسیر کاربران، بُعد بردار، ادعای bcrypt)
 
 ### زیرساخت‌های مفقود
 
@@ -646,6 +681,7 @@ erDiagram
 - تست خودکار معنادار بک‌اند و E2E
 - Alembic/migrations و `.env.example`
 - gunicorn در وابستگی‌های رسمی
+- Docker Compose قابل‌حمل برای کل پشته
 
 ### نقشه راه پیشنهادی (اولویت‌بندی)
 
@@ -670,7 +706,7 @@ erDiagram
 3. شاخه ویژگی بسازید.
 4. تغییرات را اعمال کنید (فرانت، بک‌اند یا مستندات).
 5. بررسی‌های موجود را اجرا کنید:
-   - فرانت: `npm run lint` و `npm test`
+   - فرانت: `npm run lint` و `npm test` داخل `front-end`
    - بک‌اند: در حال حاضر suite خودکار استاندارد ندارد؛ حداقل smoke دستی مسیرهای تغییر یافته
 6. Pull Request ارسال کنید.
 
@@ -683,6 +719,14 @@ erDiagram
 ---
 
 ## ۱۳. اسکریپت‌ها، استقرار و مجوز
+
+### دستورهای ریشه (`package.json`)
+
+| دستور | کار |
+|--------|-----|
+| `npm run dev` | اجرای هم‌زمان بک‌اند و فرانت با concurrently |
+| `npm run dev:frontend` | فقط فرانت‌اند |
+| `npm run dev:backend` | فقط بک‌اند از طریق `scripts/dev-backend.mjs` |
 
 ### دستورهای Frontend (`front-end/package.json`)
 
@@ -715,16 +759,11 @@ erDiagram
 - بدون سرویس LLM/Embedding معتبر و داده شغلی دارای Embedding، مسیر هوشمند عملاً قابل اتکا نیست
 - CORS پیش‌فرض دامنه Pages سازمان فعلی را پوشش نمی‌دهد مگر با `CORS_ORIGINS`
 - عدم وجود `.env.example` و migration
-- ادعای «production-ready» در README بک‌اند با وضعیت واقعی کد هم‌خوان نیست
+- اسکریپت‌های Postgres محلی ویندوزمحور هستند و جایگزین استقرار کانتینری نیستند
 
 ### مجوز
 
 در حال حاضر فایل License در مخزن اعلام نشده است. هیچ مجوز متن‌باز مشخصی نباید مفروض گرفته شود مگر اینکه نگه‌دارندگان مخزن آن را اضافه کنند.
-
-### مستندات مرتبط داخل مخزن
-
-- [`front-end/README.md`](front-end/README.md) — ساختار و قراردادهای فرانت‌اند
-- [`backend-end/README.md`](backend-end/README.md) — مستندات انگلیسی API (با اختلاف‌هایی نسبت به کد؛ این README ریشه را مبنا قرار دهید)
 
 ---
 
@@ -733,8 +772,3 @@ erDiagram
 این پروژه با هدف مشاوره هوشمند در زمینه کاریابی، در قالب پروژه پایانی مقطع کارشناسی توسط **محمد امینی** و **محسن محمودی** زیرنظر **آزمایشگاه نرم‌افزارهای هوشمند دانشگاه قم** توسعه یافته است.
 
 مخزن: [https://github.com/smartsoftwarelab/sekeh-ai](https://github.com/smartsoftwarelab/sekeh-ai)
-
-
-
-https://github.com/user-attachments/assets/01f82877-1be2-4db5-9b31-ae763c152f42
-
