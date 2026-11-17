@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import { DoorOpen, LoaderCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { authAPI } from "@/apps/user/features/auth/service/authService";
@@ -14,6 +15,7 @@ import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 import { removeTokens } from "@/shared/lib/authTokens";
 
 export default function LogoutDialog() {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(authAPI.logout, {
 		onSuccess: () => {
 			removeTokens();
@@ -39,12 +41,12 @@ export default function LogoutDialog() {
 						className="size-5 group-hover:text-background text-primary-action max-md:text-background"
 					/>
 					<p className="font-semibold group-hover:text-background text-primary-action max-md:text-background text-[14px]">
-						<span className="max-md:hidden">خروج از حساب</span>
-						<span className="md:hidden">خروج</span>
+						<span className="max-md:hidden">{t("profile.logoutDesktop")}</span>
+						<span className="md:hidden">{t("profile.logoutMobile")}</span>
 					</p>
 				</div>
 			}
-			title="خروج از حساب کاربری"
+			title={t("profile.logoutTitle")}
 			footer={
 				<button
 					onClick={handleLogout}
@@ -54,7 +56,7 @@ export default function LogoutDialog() {
 					{isPending ? (
 						<LoaderCircle className="text-primary-red animate-spin" />
 					) : (
-						"خروج"
+						t("profile.logoutConfirm")
 					)}
 				</button>
 			}
@@ -62,14 +64,11 @@ export default function LogoutDialog() {
 				<button
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
               hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<div className="max-w-130">
-				<p>
-					با خارج شدن از حساب کاربری، به صفحه لاگین هدایت می‌شوید و برای استفاده
-					مجدد از سایت باید وارد حساب کاربری خود شوید.
-				</p>
+				<p>{t("profile.logoutBody")}</p>
 			</div>
 		</Dialog>
 	);

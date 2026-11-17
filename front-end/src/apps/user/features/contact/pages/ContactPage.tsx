@@ -1,16 +1,17 @@
 import { Mail, BookOpen, GraduationCap } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function ContactPage() {
+	const { t } = useTranslation("common");
+
 	return (
 		<div className="flex items-center justify-center px-4 py-10">
 			<div className="w-full max-w-3xl rounded-3xl border border-border bg-background p-8 shadow-lg shadow-border flex flex-col gap-8">
 				<div className="flex items-center gap-5 text-primary-action">
 					<BookOpen className="size-6" />
 					<div className="flex flex-col items-start gap-3">
-						<p className="text-3xl font-bold">تماس و اطلاعات پروژه</p>
-						<p className="text-sm text-text-muted">
-							این پروژه دانشگاهی زیر نظر دکتر جلالی انجام شده است.
-						</p>
+						<p className="text-3xl font-bold">{t("contact.title")}</p>
+						<p className="text-sm text-text-muted">{t("contact.subtitle")}</p>
 					</div>
 				</div>
 
@@ -19,8 +20,12 @@ export default function ContactPage() {
 						<div className="flex items-center gap-3">
 							<Mail className="size-5 text-primary-action" />
 							<div>
-								<p className="font-semibold text-primary-text">ایمیل‌ها</p>
-								<p className="text-sm text-text-muted">پشتیبانی و سوالات</p>
+								<p className="font-semibold text-primary-text">
+									{t("contact.emailsTitle")}
+								</p>
+								<p className="text-sm text-text-muted">
+									{t("contact.emailsSubtitle")}
+								</p>
 							</div>
 						</div>
 						<div className="flex flex-col gap-2 text-primary-text text-sm">
@@ -33,8 +38,12 @@ export default function ContactPage() {
 						<div className="flex items-center gap-3">
 							{/* <Github className="size-5 text-primary-action" /> */}
 							<div>
-								<p className="font-semibold text-primary-text">گیت‌هاب</p>
-								<p className="text-sm text-text-muted">کد پروژه و مخزن عمومی</p>
+								<p className="font-semibold text-primary-text">
+									{t("contact.githubTitle")}
+								</p>
+								<p className="text-sm text-text-muted">
+									{t("contact.githubSubtitle")}
+								</p>
 							</div>
 						</div>
 						<a
@@ -58,16 +67,16 @@ export default function ContactPage() {
 					<div className="flex items-center gap-3">
 						<GraduationCap className="size-5 text-primary-action" />
 						<div>
-							<p className="font-semibold text-primary-text">مشخصات پروژه</p>
+							<p className="font-semibold text-primary-text">
+								{t("contact.projectDetailsTitle")}
+							</p>
 							<p className="text-sm text-text-muted">
-								پروژه‌ای دانشگاهی در دوره کارشناسی
+								{t("contact.projectDetailsSubtitle")}
 							</p>
 						</div>
 					</div>
 					<p className="text-sm text-primary-text leading-7">
-						این پروژه به عنوان یک کار دانشگاهی زیر نظر دکتر جلالی طراحی و
-						پیاده‌سازی شده است. هدف ایجاد یک سامانه هوشمند برای کمک به کاریابی و
-						رزومه‌‌سازی کاربران بود.
+						{t("contact.projectDetailsBody")}
 					</p>
 				</div>
 			</div>

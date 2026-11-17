@@ -1,6 +1,7 @@
 import type { FormEvent } from "react";
 import { Link } from "react-router";
 import { Send, Square } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Components
 import Message from "@/apps/user/features/chat/components/ChatMessage";
@@ -10,6 +11,7 @@ import ResumeModal from "@/apps/user/features/resume/components/ResumePickerDial
 import { useChatPage } from "@/apps/user/features/chat/hooks";
 
 export default function ChatPage() {
+	const { t } = useTranslation("common");
 	const {
 		messagesContainerRef,
 		handleMessagesScroll,
@@ -37,7 +39,7 @@ export default function ChatPage() {
 					to="/chats"
 					className="group flex items-center justify-center gap-1 rounded-lg border-2 border-primary-action bg-surface px-3 py-0.5 transition-all duration-150 hover:bg-primary-action">
 					<p className="text-[14px] font-semibold text-primary-action transition-all duration-150 group-hover:text-background">
-						بازگشت
+						{t("chat.back")}
 					</p>
 				</Link>
 			</menu>
@@ -58,8 +60,7 @@ export default function ChatPage() {
 						message={{
 							message_id: "welcome-message",
 							role: "assistant",
-							content:
-								"سلام!\n\nمن **سکه** (سـامانه کـاریابی هـوشمند) هستم.\n\nرزومه خودت رو برام بفرست تا ببینم چی کار میتونم بکنم.",
+							content: t("chat.welcomeMessage"),
 							created_at: welcomeCreatedAt,
 							status: "sent",
 						}}
@@ -90,7 +91,7 @@ export default function ChatPage() {
 						rows={1}
 						value={inputData}
 						disabled={isBusy}
-						placeholder="درمورد خودت بنویس..."
+						placeholder={t("chat.composerPlaceholder")}
 						onChange={(event) => {
 							setInputData(event.target.value);
 							if (error) setError("");
@@ -111,7 +112,7 @@ export default function ChatPage() {
 							onClick={() => {
 								if (isBusy) abort();
 							}}
-							aria-label={isBusy ? "توقف تولید پاسخ" : "ارسال پیام"}
+							aria-label={isBusy ? t("chat.stopAria") : t("chat.sendAria")}
 							className="flex size-10 cursor-pointer items-center justify-center rounded-full bg-accent transition-all duration-150 hover:bg-accent-hover">
 							{isBusy ? (
 								<Square strokeWidth={1.5} className="size-4 text-white" />

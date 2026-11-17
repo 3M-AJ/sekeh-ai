@@ -1,9 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { ToastPayload } from "@/shared/lib/toast";
+import { getLocaleDirection } from "@/shared/i18n";
 
 export default function ToastContainer() {
 	const [toasts, setToasts] = useState<ToastPayload[]>([]);
+	const { i18n } = useTranslation();
+	const dir = getLocaleDirection(i18n.language);
+	const enterX = dir === "rtl" ? 100 : -100;
 
 	useEffect(() => {
 		const handler = (event: Event) => {
@@ -41,16 +46,14 @@ export default function ToastContainer() {
 	};
 
 	return (
-		<div
-			dir="rtl"
-			className="pointer-events-none fixed md:end-4 max-md:start-2 max-md:end-2 top-4 z-1000 flex md:w-full max-w-sm flex-col gap-3">
+		<div className="pointer-events-none fixed md:end-4 max-md:start-2 max-md:end-2 top-4 z-1000 flex md:w-full max-w-sm flex-col gap-3">
 			<AnimatePresence>
 				{toasts.map((toast) => (
 					<motion.div
 						key={toast.id}
 						initial={{
 							opacity: 0,
-							x: 100,
+							x: enterX,
 						}}
 						animate={{
 							opacity: 1,
@@ -58,7 +61,7 @@ export default function ToastContainer() {
 						}}
 						exit={{
 							opacity: 0,
-							x: 100,
+							x: enterX,
 						}}
 						transition={{
 							duration: 0.25,

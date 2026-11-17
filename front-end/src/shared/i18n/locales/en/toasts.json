@@ -1,0 +1,16 @@
+{
+	"auth": {
+		"success": {},
+		"error": {
+			"unauthorized": "Please sign in to your account.",
+			"reloginRequired": "Please sign in to your account again.",
+			"forbidden": "You do not have access to the admin panel."
+		}
+	},
+	"common": {
+		"success": {},
+		"error": {
+			"unknown": "Unknown error"
+		}
+	}
+}

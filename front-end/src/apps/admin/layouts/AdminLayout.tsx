@@ -11,6 +11,7 @@ import useProfile from "@/apps/user/features/profile/store/profileStore";
 import { adminMenuItems } from "@/apps/admin/router/navigation";
 import { checkTokens, removeTokens } from "@/shared/lib/authTokens";
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 export default function AdminLayout() {
 	const { profile } = useProfile();
@@ -19,13 +20,13 @@ export default function AdminLayout() {
 	useEffect(() => {
 		if (!checkTokens()) {
 			removeTokens();
-			toast.error("لطفا وارد حساب کاربری خود شوید.");
+			toast.error(i18n.t("toasts:auth.error.unauthorized"));
 			navigate("/auth/login");
 			return;
 		}
 
 		if (profile && profile.role !== "admin") {
-			toast.warning("شما به پنل مدیریتی دسترسی ندارید.");
+			toast.warning(i18n.t("toasts:auth.error.forbidden"));
 			navigate("/chats");
 		}
 	}, [navigate, profile]);

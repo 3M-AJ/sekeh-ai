@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, type ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 
 // Components
@@ -38,6 +39,7 @@ export default function Dialog({
 	variant = "bottom",
 }: DialogProps) {
 	const titleId = useId();
+	const { t } = useTranslation("common");
 
 	const { isOpen, DialogContent, setContent, openDialog, closeDialog } =
 		useDialogContext();
@@ -72,7 +74,7 @@ export default function Dialog({
 						onClick={closeDialog}
 						variant="ghost"
 						size="icon"
-						aria-label="بستن پنجره">
+						aria-label={t("dialog.closeAria")}>
 						<X className="size-5" />
 					</Button>
 				</header>
@@ -90,7 +92,7 @@ export default function Dialog({
 				)}
 			</div>
 		),
-		[children, closeButton, closeDialog, footer, title, titleId, variant],
+		[children, closeButton, closeDialog, footer, t, title, titleId, variant],
 	);
 
 	const handleOpen = useCallback(() => {

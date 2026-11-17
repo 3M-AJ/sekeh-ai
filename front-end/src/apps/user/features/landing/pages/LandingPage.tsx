@@ -20,14 +20,17 @@ import { landingAPI } from "@/apps/user/features/landing/service/landingService"
 // Components
 import Title from "@/shared/components/ui/MainTitle";
 import { ThemeToggle } from "@/shared/theme";
+import LanguageSwitcher from "@/shared/i18n/LanguageSwitcher";
 
 // Hooks
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
+import { useTranslation } from "react-i18next";
 
 // Utils
 import { checkTokens } from "@/shared/lib/authTokens";
 
 export default function LandingPage() {
+	const { t } = useTranslation("common");
 	const { getLanding } = landingAPI;
 	const { data } = useCustomQuery({ func: getLanding, key: ["landing-data"] });
 	const navigate = useNavigate();
@@ -44,7 +47,7 @@ export default function LandingPage() {
 			<div className="h-screen w-screen bg-surface flex items-center justify-center">
 				<div className="animate-pulse flex flex-col items-center gap-4">
 					<div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
-					<p className="text-primary-text text-lg">کمی صبر کنید...</p>
+					<p className="text-primary-text text-lg">{t("landing.loading")}</p>
 				</div>
 			</div>
 		);
@@ -65,6 +68,7 @@ export default function LandingPage() {
 							{landingContent.hero.secondary_cta}
 						</span>
 					</button>
+					<LanguageSwitcher />
 					<ThemeToggle />
 				</div>
 
@@ -253,7 +257,7 @@ export default function LandingPage() {
 			{/* Footer */}
 			<footer className="bg-background border-t border-border mt-16 py-8">
 				<div className="max-w-7xl mx-auto px-4 text-center text-text-muted text-sm">
-					<p>© 2026 Seke — AI-Powered Job Discovery Platform</p>
+					<p>{t("brand.taglineFooter")}</p>
 				</div>
 			</footer>
 		</div>

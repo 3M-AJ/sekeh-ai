@@ -1,5 +1,6 @@
 import { type FormEvent } from "react";
 import { LoaderCircle, SendHorizonal } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type { ResumeFormObject } from "@/apps/user/features/resume/types";
@@ -36,17 +37,19 @@ export default function ResumeForm({
 	isPending,
 	errors,
 }: Props) {
+	const { t } = useTranslation("common");
+
 	return (
 		<Dialog
 			open={open}
 			onClose={onClose}
 			variant="fullscreen"
-			title={editingId ? "ویرایش رزومه" : "رزومه جدید"}
+			title={editingId ? t("resume.editTitle") : t("resume.createTitle")}
 			closeButton={
 				<button
 					type="button"
 					className="py-1 px-3 border-2 border-border text-text-muted rounded-md">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}
 			footer={
@@ -61,7 +64,9 @@ export default function ResumeForm({
 					) : (
 						<SendHorizonal className="size-4" />
 					)}
-					<span>{editingId ? "ذخیره تغییرات" : "ثبت رزومه"}</span>
+					<span>
+						{editingId ? t("resume.submitEdit") : t("resume.submitCreate")}
+					</span>
 				</button>
 			}>
 			<form
@@ -69,12 +74,14 @@ export default function ResumeForm({
 				onSubmit={onSubmit}
 				className="flex flex-col gap-6">
 				<div className="flex flex-col gap-2">
-					<label className="font-semibold text-primary-text">عنوان</label>
+					<label className="font-semibold text-primary-text">
+						{t("resume.titleLabel")}
+					</label>
 					<input
 						value={formData.title}
 						onChange={(e) => onChange("title", e.target.value)}
 						maxLength={80}
-						placeholder="مثلاً تجربه شغلی یا مدرک"
+						placeholder={t("resume.titlePlaceholder")}
 						aria-invalid={Boolean(errors?.title)}
 						className={`px-2 border-2 rounded-md h-10 placeholder:text-text-muted text-[16px] outline-0 focus:border-accent transition-all duration-150 ${errors?.title ? "border-red-500" : "border-border"}`}
 					/>
@@ -84,13 +91,15 @@ export default function ResumeForm({
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<label className="font-semibold text-primary-text">محتوا</label>
+					<label className="font-semibold text-primary-text">
+						{t("resume.contentLabel")}
+					</label>
 					<textarea
 						value={formData.content}
 						onChange={(e) => onChange("content", e.target.value)}
 						rows={8}
 						maxLength={4000}
-						placeholder="توضیحات رزومه خود را اینجا بنویسید..."
+						placeholder={t("resume.contentPlaceholder")}
 						aria-invalid={Boolean(errors?.content)}
 						className={`px-2 py-2 border-2 rounded-md placeholder:text-text-muted text-[16px] outline-0 focus:border-accent transition-all duration-150 resize-y ${errors?.content ? "border-red-500" : "border-border"}`}
 					/>

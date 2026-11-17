@@ -6,6 +6,8 @@ import type { Job } from "@/shared/types";
 
 // Utils
 import { extractSseEvents, parseSseEvent } from "@/apps/user/features/chat/hooks/chatStreamUtils";
+import { getStorageItem } from "@/shared/lib/storage";
+import i18n from "@/shared/i18n";
 
 export type ChatStreamStatus =
 	| "idle"
@@ -80,10 +82,9 @@ type TerminalStreamEvent =
 			type: "stopped";
 	  };
 
-const EMPTY_MESSAGE_ERROR = "پیام نمی‌تواند خالی باشد.";
-const INVALID_CHAT_ERROR = "شناسه گفتگو معتبر نیست.";
-const DEFAULT_SEND_ERROR = "ارسال پیام با خطا مواجه شد.";
-const DEFAULT_STREAM_ERROR = "دریافت پاسخ با خطا مواجه شد.";
+const emptyMessageError = () => i18n.t("chat.emptyMessage");
+const invalidChatError = () => i18n.t("chat.invalidChatId");
+const defaultStreamError = () => i18n.t("chat.streamFailed");
 
 export function useChatStream(id: number | string): UseChatStreamReturn {
 	const queryClient = useQueryClient();
@@ -175,7 +176,7 @@ export function useChatStream(id: number | string): UseChatStreamReturn {
 					success: false,
 					accepted: false,
 					stopped: false,
-					error: EMPTY_MESSAGE_ERROR,
+					error: emptyMessageError(),
 				};
 			}
 
@@ -184,7 +185,7 @@ export function useChatStream(id: number | string): UseChatStreamReturn {
 					success: false,
 					accepted: false,
 					stopped: false,
-					error: INVALID_CHAT_ERROR,
+					error: invalidChatError(),
 				};
 			}
 
@@ -347,7 +348,7 @@ export function useChatStream(id: number | string): UseChatStreamReturn {
 				}
 
 				if (!response.body) {
-					throw new Error("پاسخ قابل خواندن از سرور دریافت نشد.");
+					throw new Error(i18n.t("chat.unreadableResponse"));
 				}
 
 				const reader = response.body.getReader();
@@ -432,7 +433,7 @@ export function useChatStream(id: number | string): UseChatStreamReturn {
 				}
 
 				const message =
-					error instanceof Error ? error.message : DEFAULT_STREAM_ERROR;
+					error instanceof Error ? error.message : defaultStreamError();
 
 				if (isCurrentRequest()) {
 					setStatus("failed");
@@ -485,7 +486,7 @@ function createMessagesEndpoint(chatId: string): string {
 }
 
 function createRequestHeaders(): HeadersInit {
-	const accessToken = localStorage.getItem("access_token");
+	const accessToken = getStorageItem("accessToken");
 
 	return {
 		...(accessToken
@@ -499,7 +500,9 @@ function createRequestHeaders(): HeadersInit {
 }
 
 async function readResponseError(response: Response): Promise<string> {
-	const fallbackMessage = `${DEFAULT_SEND_ERROR} (${response.status})`;
+	const fallbackMessage = i18n.t("chat.sendFailedWithStatus", {
+		status: response.status,
+	});
 
 	try {
 		const responseText = await response.text();
@@ -524,7 +527,7 @@ async function readResponseError(response: Response): Promise<string> {
 }
 
 function getStreamEventErrorMessage(data: unknown): string {
-	return getErrorMessageFromUnknown(data) ?? DEFAULT_STREAM_ERROR;
+	return getErrorMessageFromUnknown(data) ?? defaultStreamError();
 }
 
 function getErrorMessageFromUnknown(value: unknown): string | null {

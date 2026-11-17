@@ -1,0 +1,91 @@
+{
+	"brand": {
+		"name": "Sekeh",
+		"titlePrefix1": "",
+		"titleMid1": "Sekeh",
+		"titlePrefix2": "",
+		"titleMid2": "",
+		"titlePrefix3": "",
+		"titleMid3": "AI",
+		"titleSimple": "Sekeh AI",
+		"taglineFooter": "© 2026 Seke — AI-Powered Job Discovery Platform"
+	},
+	"theme": {
+		"switchToLightAria": "Switch to light mode",
+		"switchToDarkAria": "Switch to dark mode",
+		"lightTitle": "Light mode",
+		"darkTitle": "Dark mode"
+	},
+	"language": {
+		"title": "Language",
+		"triggerAria": "Change language",
+		"persian": "Persian",
+		"english": "English"
+	},
+	"dialog": {
+		"closeAria": "Close dialog",
+		"areYouSure": "Are you sure?"
+	},
+	"actions": {
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"back": "Back",
+		"save": "Save",
+		"submit": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"continue": "Continue",
+		"yes": "Yes",
+		"no": "No"
+	},
+	"loading": {
+		"generic": "Please wait...",
+		"route": "Loading"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "Page not found",
+		"backHome": "Back to home"
+	},
+	"jobs": {
+		"details": "Details",
+		"back": "Back",
+		"link": "Link",
+		"detailsHeading": "Details:",
+		"company": "Company:",
+		"source": "Source:",
+		"salaryRange": "Salary range:",
+		"reviews": "Reviews:",
+		"reviewParticipants": "({{count}} reviews)",
+		"requirements": "Requirements:",
+		"emptyValue": "—"
+	},
+	"validation": {
+		"required": "{{label}} is required.",
+		"defaultFieldLabel": "This field",
+		"usernameRequired": "Username is required.",
+		"usernameMinLength": "Username must be at least {{min}} characters.",
+		"usernameMaxLength": "Username cannot be more than {{max}} characters.",
+		"usernameMustStartWithLetter": "Username must start with a letter.",
+		"usernameMustEndWithLetterOrNumber": "Username must end with a letter or number.",
+		"usernameInvalidChars": "Only letters, numbers, dots, hyphens, and underscores are allowed.",
+		"emailRequired": "Email is required.",
+		"emailInvalid": "Please enter a valid email.",
+		"passwordRequired": "Password is required.",
+		"passwordLengthRange": "Password must be between {{min}} and {{max}} characters.",
+		"passwordNoWhitespace": "Password must not contain spaces.",
+		"passwordNeedsLetterAndNumber": "Password must include letters and numbers.",
+		"phoneRequired": "Phone number is required.",
+		"phoneInvalid": "Enter a valid phone number.",
+		"phoneLengthRange": "Phone number must be between 7 and 15 digits."
+	},
+	"passwordRules": {
+		"ariaLabel": "Password requirements",
+		"lengthRange": "Between {{min}} and {{max}} characters",
+		"minLetter": "At least one letter",
+		"minNumber": "At least one number",
+		"noWhitespace": "No spaces",
+		"showPasswordAria": "Show password",
+		"hidePasswordAria": "Hide password"
+	}
+}

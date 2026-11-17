@@ -1,4 +1,5 @@
 import { MessageSquareText } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { chatAPI } from "@/apps/user/features/chat/service/chatService";
@@ -12,6 +13,7 @@ import PageTitle from "@/shared/components/layout/PageTitle";
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
 
 export default function ChatHistoryPage() {
+	const { t } = useTranslation("common");
 	const { data, isPending } = useCustomQuery({
 		key: ["chatHistory"],
 		func: chatAPI.chatHistory,
@@ -24,8 +26,8 @@ export default function ChatHistoryPage() {
 		<div className="p-7 overflow-y-auto overflow-x-hidden w-full h-full scrollbar-gray flex flex-col gap-5">
 			<PageTitle
 				icon={MessageSquareText}
-				title="تاریخچه چت‌ها"
-				desc="چت‌های قبلی خود را مرور و مدیریت کنید."
+				title={t("chat.historyTitle")}
+				desc={t("chat.historyDescription")}
 			/>
 
 			<menu className="absolute top-25 end-5 flex flex-col items-end gap-3 z-3">
@@ -46,7 +48,7 @@ export default function ChatHistoryPage() {
 				</main>
 			) : (
 				<div className="flex flex-col items-center justify-center h-full">
-					<p className="text-text-muted">یک چت جدید ایجاد کنید.</p>
+					<p className="text-text-muted">{t("chat.historyEmpty")}</p>
 				</div>
 			)}
 		</div>

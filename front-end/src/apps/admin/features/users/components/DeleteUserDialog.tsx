@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { LoaderCircle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { usersAPI } from "@/apps/admin/features/users/service/usersService";
@@ -21,13 +22,14 @@ export default function DeleteUserDialog({
 	username,
 	onDeleted,
 }: DeleteUserDialogProps) {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(usersAPI.deleteUser, {
 		onSuccess: () => {
 			if (cancelButton.current) {
 				(cancelButton.current as HTMLButtonElement).click();
 			}
 			onDeleted();
-		}
+		},
 	});
 	const cancelButton = useRef(null);
 
@@ -44,7 +46,7 @@ export default function DeleteUserDialog({
 					<X className="size-full text-primary-red" />
 				</div>
 			}
-			title="Are you sure?"
+			title={t("admin.deleteUserTitle")}
 			footer={
 				<button
 					onClick={handleDelete}
@@ -54,7 +56,7 @@ export default function DeleteUserDialog({
 					{isPending ? (
 						<LoaderCircle className="text-primary-red animate-spin" />
 					) : (
-						"Delete"
+						t("actions.delete")
 					)}
 				</button>
 			}
@@ -63,13 +65,11 @@ export default function DeleteUserDialog({
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
 					hover:bg-primary-action hover:text-white transition-all duration-150">
-					Cancel
+					{t("actions.cancel")}
 				</button>
 			}>
 			<p className="text-primary-action">
-				Deleting user <span className="font-semibold">{username}</span> will{" "}
-				<span className="font-semibold">permanently</span> remove all their
-				data.
+				{t("admin.deleteUserBody", { username })}
 			</p>
 		</Dialog>
 	);

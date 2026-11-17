@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { KeyRound, LoaderCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { profileAPI } from "@/apps/user/features/profile/service/profileService";
@@ -17,6 +18,7 @@ import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 // Utils
 import { getPasswordError } from "@/shared/lib/formValidation";
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 interface PasswordForm {
 	current: string;
@@ -33,16 +35,17 @@ const initialForm: PasswordForm = {
 };
 
 const getFormErrors = (form: PasswordForm) => ({
-	current: form.current ? "" : "رمز عبور فعلی الزامی است.",
+	current: form.current ? "" : i18n.t("profile.currentPasswordRequired"),
 	new: getPasswordError(form.new),
 	confirm: !form.confirm
-		? "تکرار رمز عبور جدید الزامی است."
+		? i18n.t("profile.confirmPasswordRequired")
 		: form.new !== form.confirm
-			? "رمز عبور جدید و تکرار آن یکسان نیست."
+			? i18n.t("profile.confirmPasswordMismatch")
 			: "",
 });
 
 export default function ChangePasswordDialog() {
+	const { t } = useTranslation("common");
 	const [form, setForm] = useState<PasswordForm>(initialForm);
 	const [touched, setTouched] = useState<TouchedFields>({});
 	const dialog = useDialogContext();
@@ -70,7 +73,7 @@ export default function ChangePasswordDialog() {
 			{ current_password: form.current, new_password: form.new },
 			{
 				onSuccess: () => {
-					toast.success("رمز عبور شما با موفقیت به‌روزرسانی شد.");
+					toast.success(t("toasts:profile.success.passwordChanged"));
 					setForm(initialForm);
 					setTouched({});
 					dialog.closeDialog();
@@ -85,11 +88,11 @@ export default function ChangePasswordDialog() {
 				trigger={
 					<Button aria-haspopup="dialog" aria-expanded={dialog.isOpen}>
 						<KeyRound className="size-5" strokeWidth={1.5} />
-						<span className="pb-1">تغییر رمز عبور</span>
+						<span className="pb-1">{t("profile.changePasswordTrigger")}</span>
 					</Button>
 				}
 				variant="fullscreen"
-				title="تغییر رمز عبور"
+				title={t("profile.changePasswordTitle")}
 				footer={
 					<>
 						<Button
@@ -99,7 +102,7 @@ export default function ChangePasswordDialog() {
 								setTouched({});
 							}}
 							disabled={isPending}>
-							بازگشت
+							{t("actions.back")}
 						</Button>
 						<Button
 							type="submit"
@@ -108,10 +111,10 @@ export default function ChangePasswordDialog() {
 							{isPending ? (
 								<>
 									<LoaderCircle className="size-4 animate-spin" />
-									<span>در حال ثبت</span>
+									<span>{t("profile.submitting")}</span>
 								</>
 							) : (
-								"ثبت"
+								t("actions.submit")
 							)}
 						</Button>
 					</>
@@ -125,7 +128,7 @@ export default function ChangePasswordDialog() {
 					}}
 					className="flex min-w-0 flex-col gap-5 md:min-w-96">
 					<PasswordInput
-						label="رمز عبور فعلی"
+						label={t("profile.currentPasswordLabel")}
 						value={form.current}
 						onChange={(event) => handleChange("current", event.target.value)}
 						onBlur={() => markTouched("current")}
@@ -137,7 +140,7 @@ export default function ChangePasswordDialog() {
 
 					<div className="space-y-2">
 						<PasswordInput
-							label="رمز عبور جدید"
+							label={t("profile.newPasswordLabel")}
 							value={form.new}
 							onChange={(event) => handleChange("new", event.target.value)}
 							onBlur={() => markTouched("new")}
@@ -150,7 +153,7 @@ export default function ChangePasswordDialog() {
 					</div>
 
 					<PasswordInput
-						label="تکرار رمز عبور جدید"
+						label={t("profile.confirmNewPasswordLabel")}
 						value={form.confirm}
 						onChange={(event) => handleChange("confirm", event.target.value)}
 						onBlur={() => markTouched("confirm")}

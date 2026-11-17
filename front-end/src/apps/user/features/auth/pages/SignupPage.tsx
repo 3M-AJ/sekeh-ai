@@ -1,5 +1,6 @@
 import { LoaderCircle } from "lucide-react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // Components
 import Button from "@/shared/components/ui/Button";
@@ -11,6 +12,7 @@ import PasswordRequirements from "@/shared/components/ui/PasswordRequirements";
 import { useSignupPage } from "@/apps/user/features/auth/hooks/useSignupPage";
 
 export default function SignupPage() {
+	const { t } = useTranslation("common");
 	const {
 		form,
 		touched,
@@ -25,10 +27,10 @@ export default function SignupPage() {
 	return (
 		<div className="flex h-full flex-col justify-center gap-7 py-5 ">
 			<div className="space-y-2 text-center">
-				<h1 className="text-4xl font-bold text-primary-text">ثبت نام</h1>
-				<p className="text-sm text-text-muted">
-					یک نام کاربری و رمز عبور امن انتخاب کنید.
-				</p>
+				<h1 className="text-4xl font-bold text-primary-text">
+					{t("auth.signup.title")}
+				</h1>
+				<p className="text-sm text-text-muted">{t("auth.signup.subtitle")}</p>
 			</div>
 
 			<section className="relative">
@@ -41,19 +43,19 @@ export default function SignupPage() {
 					}}
 					className="flex flex-col gap-4 px-10 pb-6 text-primary-text overflow-y-auto max-md:max-h-[300px] md:max-h-[400px]">
 					<Input
-						label="نام کاربری"
+						label={t("auth.signup.usernameLabel")}
 						value={form.username}
 						onChange={(event) => handleChange("username", event.target.value)}
 						onBlur={() => markTouched("username")}
 						autoComplete="username"
 						maxLength={40}
 						error={touched.username ? validationErrors.username : undefined}
-						hint="۳ تا ۴۰ کاراکتر؛ شروع با حرف و استفاده از حروف، اعداد، نقطه، خط تیره یا زیرخط"
+						hint={t("auth.signup.usernameHint")}
 					/>
 
 					<div className="space-y-2">
 						<PasswordInput
-							label="رمز عبور"
+							label={t("auth.signup.passwordLabel")}
 							value={form.password}
 							onChange={(event) => handleChange("password", event.target.value)}
 							onBlur={() => markTouched("password")}
@@ -65,7 +67,7 @@ export default function SignupPage() {
 					</div>
 
 					<PasswordInput
-						label="تکرار رمز عبور"
+						label={t("auth.signup.confirmPasswordLabel")}
 						value={form.confirm}
 						onChange={(event) => handleChange("confirm", event.target.value)}
 						onBlur={() => markTouched("confirm")}
@@ -74,7 +76,7 @@ export default function SignupPage() {
 						error={touched.confirm ? validationErrors.confirm : undefined}
 					/>
 				</form>
-				<div className="md:hidden pointer-events-none absolute bottom-0 left-0 h-10 w-full bg-linear-to-t from-background to-transparent" />
+				<div className="md:hidden pointer-events-none absolute bottom-0 start-0 h-10 w-full bg-linear-to-t from-background to-transparent" />
 			</section>
 
 			<Button
@@ -85,17 +87,17 @@ export default function SignupPage() {
 				{isPending ? (
 					<>
 						<LoaderCircle className="size-5 animate-spin" />
-						<span>در حال ثبت نام</span>
+						<span>{t("auth.signup.submitting")}</span>
 					</>
 				) : (
-					"ادامه"
+					t("auth.signup.submit")
 				)}
 			</Button>
 
 			<footer className="flex flex-col items-center">
-				<p className="text-primary-action">قبلاً حساب کاربری ساخته‌اید؟</p>
+				<p className="text-primary-action">{t("auth.signup.hasAccountPrompt")}</p>
 				<Link to="../login" className="font-semibold text-accent">
-					ورود
+					{t("auth.signup.loginLink")}
 				</Link>
 			</footer>
 		</div>

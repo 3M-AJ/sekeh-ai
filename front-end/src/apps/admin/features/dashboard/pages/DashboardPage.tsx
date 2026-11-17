@@ -1,4 +1,5 @@
 import { Settings } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type { AdminStats } from "@/apps/admin/features/dashboard/types";
@@ -9,22 +10,23 @@ import PageTitle from "@/shared/components/layout/PageTitle";
 // Hooks
 import { useDashboardPage } from "@/apps/admin/features/dashboard/hooks/useDashboardPage";
 
-const STAT_LABELS: Record<keyof AdminStats, string> = {
-	total_users: "کاربران",
-	total_jobs: "مشاغل",
-	total_chats: "چت‌ها",
-	total_messages: "پیام‌ها",
-};
-
 export default function AdminDashboardPage() {
+	const { t } = useTranslation("common");
 	const { stats, isPending } = useDashboardPage();
+
+	const STAT_LABELS: Record<keyof AdminStats, string> = {
+		total_users: t("admin.statUsers"),
+		total_jobs: t("admin.statJobs"),
+		total_chats: t("admin.statChats"),
+		total_messages: t("admin.statMessages"),
+	};
 
 	return (
 		<div className="p-7 max-md:p-4 overflow-y-auto h-full w-full flex flex-col gap-7">
 			<PageTitle
 				icon={Settings}
-				title="پنل مدیریتی"
-				desc="آمار کلی سامانه را مشاهده و وضعیت آن را بررسی کنید."
+				title={t("admin.dashboardTitle")}
+				desc={t("admin.dashboardDescription")}
 			/>
 			<div className="grid grid-cols-4 gap-5">
 				{isPending

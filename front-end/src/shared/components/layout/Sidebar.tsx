@@ -1,4 +1,5 @@
 import { NavLink, useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 import type { NavItem } from "./types";
 import type { ReactNode } from "react";
 
@@ -9,10 +10,11 @@ interface SidebarProps {
 
 export default function Sidebar({ items, footer }: SidebarProps) {
 	const location = useLocation();
+	const { t } = useTranslation("common");
 
 	return (
 		<nav className="flex flex-col items-start gap-5 w-full h-full bg-background p-2">
-			{items.map(({ icon: Icon, path, label, to }) => {
+			{items.map(({ icon: Icon, path, labelKey, to }) => {
 				const href = to ?? `/${path}`;
 				const isThisPage = location.pathname.includes(path);
 				return (
@@ -32,7 +34,7 @@ export default function Sidebar({ items, footer }: SidebarProps) {
 							className={`font-semibold ${
 								isThisPage ? "text-on-accent" : "text-primary-text"
 							}`}>
-							{label}
+							{t(labelKey)}
 						</span>
 					</NavLink>
 				);

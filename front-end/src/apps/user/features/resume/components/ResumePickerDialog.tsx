@@ -1,4 +1,5 @@
 import { FileText, LoaderCircle, MessageSquarePlus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { resumeAPI, type ResumeItem } from "@/apps/user/features/resume/service/resumeService";
@@ -17,6 +18,7 @@ interface ResumeModalProps {
 export default function ResumePickerDialog({
 	onSelectResume,
 }: ResumeModalProps) {
+	const { t } = useTranslation("common");
 	const dialog = useDialogContext();
 	const { data, isLoading } = useCustomQuery({
 		key: ["resumes"],
@@ -41,7 +43,7 @@ export default function ResumePickerDialog({
 					<FileText className="size-4" />
 				</span>
 			}
-			title="رزومه‌های من"
+			title={t("resume.pickerTitle")}
 			triggerClass="shrink-0"
 			footer={<></>}>
 			<div className="flex flex-col gap-3 min-w-[280px]">
@@ -51,7 +53,7 @@ export default function ResumePickerDialog({
 					</div>
 				) : resumes.length === 0 ? (
 					<div className="rounded-lg border border-dashed border-border p-6 text-center text-sm text-text-muted">
-						هنوز رزومه‌ای ذخیره نشده است.
+						{t("resume.empty")}
 					</div>
 				) : (
 					<div className="flex flex-col gap-3">
@@ -60,7 +62,7 @@ export default function ResumePickerDialog({
 								type="button"
 								key={resume.id}
 								onClick={() => handleSelect(resume)}
-								className="rounded-lg border border-border bg-background p-4 text-right transition-all duration-150 hover:border-accent hover:shadow-sm cursor-pointer">
+								className="rounded-lg border border-border bg-background p-4 text-end transition-all duration-150 hover:border-accent hover:shadow-sm cursor-pointer">
 								<div className="flex items-center gap-2 text-accent">
 									<MessageSquarePlus className="size-4" />
 									<span className="font-semibold text-primary-text">

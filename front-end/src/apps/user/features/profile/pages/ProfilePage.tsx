@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { profileAPI } from "@/apps/user/features/profile/service/profileService";
@@ -17,6 +18,7 @@ import useProfile from "@/apps/user/features/profile/store/profileStore";
 import { formatDate } from "@/shared/lib/date";
 
 export default function ProfilePage() {
+	const { t } = useTranslation("common");
 	const { getProfile } = profileAPI;
 	const { profile, setProfile } = useProfile();
 
@@ -50,13 +52,13 @@ export default function ProfilePage() {
 
 			<section className="flex flex-col max-md:items-center gap-5 text-xl text-primary-text rounded-lg py-7 w-fit">
 				<div className="flex gap-2">
-					<p className="font-semibold shrink-0">آدرس ایمیل :</p>
+					<p className="font-semibold shrink-0">{t("profile.emailLabel")}</p>
 					<p className="overflow-hidden truncate" dir="ltr">
 						{profile?.email}
 					</p>
 				</div>
 				<div className="flex gap-2">
-					<p className="font-semibold shrink-0">شماره تلفن :</p>
+					<p className="font-semibold shrink-0">{t("profile.phoneLabel")}</p>
 					<p>{profile?.phone_number}</p>
 				</div>
 			</section>
@@ -69,11 +71,15 @@ export default function ProfilePage() {
 
 			<footer className="flex flex-col gap-1">
 				<p className="text-[14px] font-medium text-text-muted">
-					تاریخ عضویت : {formatDate(profile?.created_at ?? "")}
+					{t("profile.joinedAt", {
+						date: formatDate(profile?.created_at ?? ""),
+					})}
 				</p>
 				{profile?.updated_at && (
 					<p className="text-[14px] font-medium text-text-muted">
-						آخرین تغییرات : {formatDate(profile.updated_at)}
+						{t("profile.updatedAt", {
+							date: formatDate(profile.updated_at),
+						})}
 					</p>
 				)}
 			</footer>

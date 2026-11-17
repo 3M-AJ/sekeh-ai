@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle, PenBoxIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type { AdminJob } from "@/apps/admin/features/jobs/types";
@@ -42,6 +43,7 @@ function Field({
 }
 
 export default function EditJobDialog({ job }: EditJobDialogProps) {
+	const { t } = useTranslation("common");
 	const queryClient = useQueryClient();
 	const cancelButton = useRef(null);
 
@@ -103,7 +105,7 @@ export default function EditJobDialog({ job }: EditJobDialogProps) {
 					<PenBoxIcon className="size-full text-primary-action" />
 				</div>
 			}
-			title="ویرایش کارت شغل"
+			title={t("admin.editJobTitle")}
 			footer={
 				<button
 					onClick={handleSubmit}
@@ -113,7 +115,7 @@ export default function EditJobDialog({ job }: EditJobDialogProps) {
 					{isPending ? (
 						<LoaderCircle className="text-accent animate-spin" />
 					) : (
-						"ذخیره"
+						t("actions.save")
 					)}
 				</button>
 			}
@@ -122,47 +124,47 @@ export default function EditJobDialog({ job }: EditJobDialogProps) {
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
 					hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<div className="flex flex-col gap-3">
 				<div className="grid grid-cols-2 gap-3">
 					<Field
-						label="Title"
+						label={t("admin.fieldTitle")}
 						value={form.job_title}
 						onChange={(v) => setForm({ ...form, job_title: v })}
 					/>
 					<Field
-						label="Company"
+						label={t("admin.fieldCompany")}
 						value={form.company_name}
 						onChange={(v) => setForm({ ...form, company_name: v })}
 					/>
 					<Field
-						label="Location"
+						label={t("admin.fieldLocation")}
 						value={form.location}
 						onChange={(v) => setForm({ ...form, location: v })}
 					/>
 					<Field
-						label="Paycheck"
+						label={t("admin.fieldPaycheck")}
 						value={form.paycheck}
 						onChange={(v) => setForm({ ...form, paycheck: v })}
 					/>
 					<Field
-						label="Source"
+						label={t("admin.fieldSource")}
 						value={form.source_site}
 						onChange={(v) => setForm({ ...form, source_site: v })}
 					/>
 				</div>
 
 				<Field
-					label="Requirements (comma separated)"
+					label={t("admin.fieldRequirements")}
 					value={form.requirements}
 					onChange={(v) => setForm({ ...form, requirements: v })}
 				/>
 
 				<div className="flex flex-col gap-2">
 					<label className="text-[14px] text-primary-action font-semibold">
-						Raw Text
+						{t("admin.fieldRawText")}
 					</label>
 					<textarea
 						value={form.raw_text}

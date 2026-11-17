@@ -1,5 +1,6 @@
 import { BanIcon, HeartCrack } from "lucide-react";
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { profileAPI } from "@/apps/user/features/profile/service/profileService";
@@ -15,6 +16,7 @@ import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 import { removeTokens } from "@/shared/lib/authTokens";
 
 export default function DeleteAccountDialog() {
+	const { t } = useTranslation("common");
 	const navigate = useNavigate();
 	const { deleteProfile } = profileAPI;
 	const { mutate } = useCustomMutation(deleteProfile, {
@@ -36,16 +38,16 @@ export default function DeleteAccountDialog() {
 						strokeWidth={1.5}
 						className="size-5 transition-colors duration-200"
 					/>
-					<span>حذف حساب</span>
+					<span>{t("profile.deleteTrigger")}</span>
 				</Button>
 			}
-			title="حذف حساب کاربری"
+			title={t("profile.deleteTitle")}
 			footer={
 				<button
 					onClick={handleDeleteAccount}
 					className="group py-1 px-3 border-2 border-primary-red text-primary-red rounded-md font-semibold cursor-pointer
 						hover:bg-primary-red hover:text-white transition-all duration-150 flex gap-2 items-center">
-					<span>حذف</span>
+					<span>{t("profile.deleteConfirm")}</span>
 					<HeartCrack
 						strokeWidth={1.5}
 						className="size-5 text-primary-red group-hover:text-white transition-all duration-150"
@@ -56,13 +58,15 @@ export default function DeleteAccountDialog() {
 				<button
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
               hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<p className="text-primary-action">
-				حذف حساب کاربری یک عملیات{" "}
-				<span className="font-semibold">بدون برگشت</span> است و در صورت تایید
-				تمامی اطلاعات شما <span className="font-semibold">حذف خواهند شد</span>.
+				{t("profile.deleteBodyBefore")}{" "}
+				<span className="font-semibold">{t("profile.deleteIrreversible")}</span>{" "}
+				{t("profile.deleteBodyMiddle")}{" "}
+				<span className="font-semibold">{t("profile.deleteWillBeDeleted")}</span>
+				.
 			</p>
 		</Dialog>
 	);

@@ -12,6 +12,7 @@ import useProfile from "@/apps/user/features/profile/store/profileStore";
 import { userMenuItems } from "@/apps/user/router/navigation";
 import { checkTokens, removeTokens } from "@/shared/lib/authTokens";
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 export default function UserLayout() {
 	const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function UserLayout() {
 	useEffect(() => {
 		const handler = () => {
 			removeTokens();
-			toast.error("لطفا وارد حساب کاربری خود شوید.");
+			toast.error(i18n.t("toasts:auth.error.unauthorized"));
 			navigate("/auth/login");
 		};
 

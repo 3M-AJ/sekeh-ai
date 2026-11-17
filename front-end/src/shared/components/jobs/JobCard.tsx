@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type { Job } from "@/shared/types";
@@ -23,19 +24,20 @@ interface JobCardProps extends Job {
 }
 
 export default function JobCard(props: JobCardProps) {
+	const { t } = useTranslation("common");
 	const [showDetails, setShowDetails] = useState(false);
 	const [saved, setSaved] = useState(props.bookmarked ?? false);
+	const queryClient = useQueryClient();
 	const { markCard } = MarkAPI;
 	const { mutate: mark } = useCustomMutation(markCard, {
 		onSuccess: (data) => {
-			if (!data.data.bookmarked) toast.success("با موفقیت حذف شد.");
-			else toast.success("با موفقیت ذخیره شد.");
+			if (!data.data.bookmarked) toast.success(t("toasts:marks.success.removed"));
+			else toast.success(t("toasts:marks.success.saved"));
 			setSaved((prev) => !prev);
 			if (props.jobFetchKey)
 				queryClient.refetchQueries({ queryKey: [props.jobFetchKey] });
 		},
 	});
-	const queryClient = useQueryClient();
 
 	const handleMark = () => {
 		mark(props);
@@ -76,7 +78,7 @@ export default function JobCard(props: JobCardProps) {
 					disabled={!props.company_reviews && !props.paycheck}
 					className="cursor-pointer w-full h-full rounded-full text-background bg-primary-action transition
 					disabled:opacity-50">
-					{showDetails ? "بازگشت" : "جزییات"}
+					{showDetails ? t("jobs.back") : t("jobs.details")}
 				</button>
 
 				<button
@@ -84,7 +86,7 @@ export default function JobCard(props: JobCardProps) {
 						window.open(props.job_url, "_blank", "noopener,noreferrer")
 					}
 					className="cursor-pointer w-full h-full rounded-full border-2 text-primary-action bg-transparent transition">
-					لینک
+					{t("jobs.link")}
 				</button>
 
 				<button onClick={handleMark} className="cursor-pointer">
@@ -113,14 +115,18 @@ function DetailsView({
 	paycheck,
 	company_reviews,
 }: DetailsViewProps) {
+	const { t } = useTranslation("common");
+
 	return (
 		<div className="flex flex-col h-full overflow-auto justify-start gap-2.5 text-primary-text text-[14px] *:not-first:ps-5">
-			<h3 className="text-[14px] font-medium text-text-muted">جزییات :</h3>
+			<h3 className="text-[14px] font-medium text-text-muted">
+				{t("jobs.detailsHeading")}
+			</h3>
 
 			<div className="grid grid-cols-[1fr_2fr] gap-3">
 				{!!company_name && (
 					<>
-						<span className="text-text-muted text-nowrap">شرکت :</span>
+						<span className="text-text-muted text-nowrap">{t("jobs.company")}</span>
 						<span className="font-semibold text-end line-clamp-2">
 							{company_name}
 						</span>
@@ -128,24 +134,28 @@ function DetailsView({
 				)}
 				{!!source_site && (
 					<>
-						<span className="text-text-muted text-nowrap">منبع :</span>
+						<span className="text-text-muted text-nowrap">{t("jobs.source")}</span>
 						<span className="font-semibold text-end">{source_site}</span>
 					</>
 				)}
 				{!!paycheck && (
 					<>
-						<span className="text-text-muted text-nowrap">بازه حقوق :</span>
+						<span className="text-text-muted text-nowrap">
+							{t("jobs.salaryRange")}
+						</span>
 						<span className="font-semibold text-end">{paycheck}</span>
 					</>
 				)}
 				{!!company_reviews && (
 					<>
-						<span className="text-text-muted">نظرات :</span>
+						<span className="text-text-muted">{t("jobs.reviews")}</span>
 						<span className="font-semibold text-end">
 							{company_reviews.rating.toFixed(1)} ⭐{" "}
 							{company_reviews.count && (
 								<span className="text-text-muted font-normal">
-									({company_reviews.count} شرکت کننده)
+									{t("jobs.reviewParticipants", {
+										count: company_reviews.count,
+									})}
 								</span>
 							)}
 						</span>
@@ -161,10 +171,12 @@ interface OverViewProps {
 }
 
 function OverView({ requirements }: OverViewProps) {
+	const { t } = useTranslation("common");
+
 	return (
 		<div className="flex flex-col h-full justify-start gap-2.5">
 			<div className="h-full text-[14px]">
-				<p className="text-text-muted font-medium">نیازمندی‌ها:</p>
+				<p className="text-text-muted font-medium">{t("jobs.requirements")}</p>
 				<ul className="list-disc flex flex-col gap-1 ps-8 max-h-full text-primary-text overflow-y-auto">
 					{requirements.map((requirement) => (
 						<li key={requirement}>{requirement}</li>

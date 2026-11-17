@@ -15,6 +15,7 @@ import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
 // Utils
 import { getRequiredError, sanitizeText } from "@/shared/lib/formValidation";
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 export function useResumePage() {
 	const [formData, setFormData] = useState<ResumeFormObject>({
@@ -50,7 +51,7 @@ export function useResumePage() {
 		resumeAPI.createResume,
 		{
 			onSuccess: () => {
-				toast.success("رزومه جدید با موفقیت ثبت شد.");
+				toast.success(i18n.t("toasts:resume.success.created"));
 				closeDialog();
 				setErrors({});
 				setFormData({ title: "", content: "" });
@@ -63,7 +64,7 @@ export function useResumePage() {
 			resumeAPI.updateResume(vars.id, vars.form),
 		{
 			onSuccess: () => {
-				toast.success("رزومه با موفقیت ویرایش شد.");
+				toast.success(i18n.t("toasts:resume.success.updated"));
 				setEditingId(null);
 				setErrors({});
 				setFormData({ title: "", content: "" });
@@ -102,13 +103,19 @@ export function useResumePage() {
 		};
 		const nextErrors: { title?: string; content?: string } = {};
 		if (!payload.title)
-			nextErrors.title = getRequiredError(formData.title, "عنوان");
+			nextErrors.title = getRequiredError(
+				formData.title,
+				i18n.t("resume.titleFieldName"),
+			);
 		if (!payload.content)
-			nextErrors.content = getRequiredError(formData.content, "محتوا");
+			nextErrors.content = getRequiredError(
+				formData.content,
+				i18n.t("resume.contentFieldName"),
+			);
 		if (payload.title.length > 80)
-			nextErrors.title = "عنوان نباید بیشتر از 80 کاراکتر باشد.";
+			nextErrors.title = i18n.t("resume.titleMax");
 		if (payload.content.length > 4000)
-			nextErrors.content = "محتوا نباید بیشتر از 4000 کاراکتر باشد.";
+			nextErrors.content = i18n.t("resume.contentMax");
 		setErrors(nextErrors);
 		if (Object.keys(nextErrors).length > 0) return;
 		if (editingId !== null) {

@@ -12,6 +12,7 @@ import type { Exceptions } from "@/shared/api/client";
 
 // Utils
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 export function useCustomMutation<
 	TData = unknown,
@@ -45,7 +46,9 @@ export function useCustomMutation<
 			options?.onError?.(data, variables, onMutateResult, context);
 
 			const error = data as AxiosError<Exceptions>;
-			toast.error(error.response?.data.error ?? "خطای ناشناخته");
+			toast.error(
+				error.response?.data.error ?? i18n.t("toasts:common.error.unknown"),
+			);
 		},
 	});
 }

@@ -1,3 +1,5 @@
+import i18n from "@/shared/i18n";
+
 export const sanitizeText = (value: string) => value.trim();
 
 export const USERNAME_MIN_LENGTH = 3;
@@ -17,37 +19,46 @@ export const getUsernameError = (
 	const normalized = sanitizeText(value);
 	const { allowEmail = false } = options;
 
-	if (!normalized) return "نام کاربری الزامی است.";
+	if (!normalized) return i18n.t("validation.usernameRequired");
 	if (allowEmail && normalized.includes("@")) {
-		return isEmail(normalized) ? "" : "لطفاً یک ایمیل معتبر وارد کنید.";
+		return isEmail(normalized) ? "" : i18n.t("validation.emailInvalid");
 	}
 	if (normalized.length < USERNAME_MIN_LENGTH) {
-		return `نام کاربری باید حداقل ${USERNAME_MIN_LENGTH} کاراکتر باشد.`;
+		return i18n.t("validation.usernameMinLength", {
+			min: USERNAME_MIN_LENGTH,
+		});
 	}
 	if (normalized.length > USERNAME_MAX_LENGTH) {
-		return `نام کاربری نمی‌تواند بیشتر از ${USERNAME_MAX_LENGTH} کاراکتر باشد.`;
+		return i18n.t("validation.usernameMaxLength", {
+			max: USERNAME_MAX_LENGTH,
+		});
 	}
 	if (!/^[\p{L}]/u.test(normalized)) {
-		return "نام کاربری باید با یک حرف شروع شود.";
+		return i18n.t("validation.usernameMustStartWithLetter");
 	}
 	if (!/[\p{L}\p{N}]$/u.test(normalized)) {
-		return "نام کاربری باید با حرف یا عدد پایان یابد.";
+		return i18n.t("validation.usernameMustEndWithLetterOrNumber");
 	}
 	if (!/^[\p{L}\p{N}._-]+$/u.test(normalized)) {
-		return "فقط حروف، اعداد، نقطه، خط تیره و زیرخط مجاز هستند.";
+		return i18n.t("validation.usernameInvalidChars");
 	}
 	return "";
 };
 
-export const getRequiredError = (value: string, label = "این فیلد") => {
-	if (!sanitizeText(value)) return `${label} الزامی است.`;
+export const getRequiredError = (
+	value: string,
+	label = i18n.t("validation.defaultFieldLabel"),
+) => {
+	if (!sanitizeText(value)) {
+		return i18n.t("validation.required", { label });
+	}
 	return "";
 };
 
 export const getEmailError = (value: string) => {
 	const normalized = sanitizeText(value);
-	if (!normalized) return "ایمیل الزامی است.";
-	if (!isEmail(normalized)) return "لطفاً یک ایمیل معتبر وارد کنید.";
+	if (!normalized) return i18n.t("validation.emailRequired");
+	if (!isEmail(normalized)) return i18n.t("validation.emailInvalid");
 	return "";
 };
 
@@ -63,19 +74,22 @@ export const getPasswordRuleState = (value: string): PasswordRuleState => ({
 		value.length >= PASSWORD_MIN_LENGTH && value.length <= PASSWORD_MAX_LENGTH,
 	hasLetter: /\p{L}/u.test(value),
 	hasNumber: /\p{N}/u.test(value),
-	hasNoWhitespace: !/\s/u.test(value),
+	hasNoWhitespace: !/\s/.test(value),
 });
 
 export const getPasswordError = (value: string) => {
-	if (!value) return "رمز عبور الزامی است.";
+	if (!value) return i18n.t("validation.passwordRequired");
 
 	const rules = getPasswordRuleState(value);
 	if (!rules.hasValidLength) {
-		return `رمز عبور باید بین ${PASSWORD_MIN_LENGTH} تا ${PASSWORD_MAX_LENGTH} کاراکتر باشد.`;
+		return i18n.t("validation.passwordLengthRange", {
+			min: PASSWORD_MIN_LENGTH,
+			max: PASSWORD_MAX_LENGTH,
+		});
 	}
-	if (!rules.hasNoWhitespace) return "رمز عبور نباید شامل فاصله باشد.";
+	if (!rules.hasNoWhitespace) return i18n.t("validation.passwordNoWhitespace");
 	if (!rules.hasLetter || !rules.hasNumber) {
-		return "رمز عبور باید شامل حروف و اعداد باشد.";
+		return i18n.t("validation.passwordNeedsLetterAndNumber");
 	}
 	return "";
 };
@@ -104,14 +118,14 @@ export const parsePhoneNumber = (value: string): string | null => {
 
 export const getPhoneError = (value: string) => {
 	const normalized = sanitizeText(value);
-	if (!normalized) return "شماره تلفن الزامی است.";
+	if (!normalized) return i18n.t("validation.phoneRequired");
 
 	const sanitized = sanitizePhoneInput(normalized);
-	if (!sanitized) return "شماره تلفن معتبر وارد کنید.";
+	if (!sanitized) return i18n.t("validation.phoneInvalid");
 
 	const digitsOnly = sanitized.replace(/^\+/, "");
 	if (digitsOnly.length < 7 || digitsOnly.length > 15) {
-		return "شماره تلفن باید بین 7 تا 15 رقم باشد.";
+		return i18n.t("validation.phoneLengthRange");
 	}
 
 	return "";

@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { LoaderCircle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { jobsAPI } from "@/apps/admin/features/jobs/service/jobsService";
@@ -21,6 +22,7 @@ export default function DeleteJobDialog({
 	title,
 	onDeleted,
 }: DeleteJobDialogProps) {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(jobsAPI.deleteJob, {
 		onSuccess: () => {
 			if (cancelButton.current) {
@@ -44,7 +46,7 @@ export default function DeleteJobDialog({
 					<X className="size-full text-primary-red" />
 				</div>
 			}
-			title="Are you sure?"
+			title={t("admin.deleteJobTitle")}
 			footer={
 				<button
 					onClick={handleDelete}
@@ -54,7 +56,7 @@ export default function DeleteJobDialog({
 					{isPending ? (
 						<LoaderCircle className="text-primary-red animate-spin" />
 					) : (
-						"Delete"
+						t("actions.delete")
 					)}
 				</button>
 			}
@@ -63,12 +65,11 @@ export default function DeleteJobDialog({
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
 					hover:bg-primary-action hover:text-white transition-all duration-150">
-					Cancel
+					{t("actions.cancel")}
 				</button>
 			}>
 			<p className="text-primary-action">
-				Deleting job <span className="font-semibold">{title}</span> is
-				permanent.
+				{t("admin.deleteJobBody", { title })}
 			</p>
 		</Dialog>
 	);

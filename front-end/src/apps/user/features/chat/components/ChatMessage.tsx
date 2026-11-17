@@ -9,6 +9,7 @@ import {
 	ThumbsUp,
 	X,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type {
@@ -23,6 +24,7 @@ import JobCard from "@/shared/components/jobs/JobCard";
 // Utils
 import { formatDate } from "@/shared/lib/date";
 import { toast } from "@/shared/lib/toast";
+import i18n from "@/shared/i18n";
 
 interface MessageProps {
 	message: MessageObject;
@@ -37,7 +39,7 @@ async function handleCopy(text: string): Promise<void> {
 	const trimmedText = text.trim();
 
 	if (!trimmedText) {
-		toast.error("متنی برای کپی کردن وجود ندارد.");
+		toast.error(i18n.t("toasts:chat.error.nothingToCopy"));
 		return;
 	}
 
@@ -48,9 +50,9 @@ async function handleCopy(text: string): Promise<void> {
 
 		await navigator.clipboard.writeText(text);
 
-		toast.success("پیام با موفقیت کپی شد.");
+		toast.success(i18n.t("toasts:chat.success.copied"));
 	} catch {
-		toast.error("کپی کردن پیام با خطا مواجه شد. دوباره امتحان کنید.");
+		toast.error(i18n.t("toasts:chat.error.copyFailed"));
 	}
 }
 
@@ -68,6 +70,7 @@ function MessageStatusView({ status }: MessageStatusProps) {
 }
 
 function UserMessage({ message }: MessageProps) {
+	const { t } = useTranslation("common");
 	const status = resolveMessageStatus(message.status);
 	const isInProgress = status === "sending";
 	const canCopy = Boolean(message.content.trim());
@@ -107,7 +110,7 @@ function UserMessage({ message }: MessageProps) {
 								onClick={() => {
 									void handleCopy(message.content);
 								}}
-								aria-label="کپی پیام"
+								aria-label={t("chat.copyMessageAria")}
 								className="size-7 cursor-pointer rounded-full border-2 border-transparent p-1 transition-all duration-150 hover:border-border disabled:cursor-not-allowed disabled:opacity-40">
 								<Copy
 									strokeWidth={1.5}
@@ -131,6 +134,7 @@ function UserMessage({ message }: MessageProps) {
 }
 
 function AssistantMessage({ message }: MessageProps) {
+	const { t } = useTranslation("common");
 	const status = resolveMessageStatus(message.status);
 
 	const isWaiting = status === "waiting";
@@ -211,7 +215,7 @@ function AssistantMessage({ message }: MessageProps) {
 								onClick={() => {
 									void handleCopy(message.content);
 								}}
-								aria-label="کپی پاسخ"
+								aria-label={t("chat.copyReplyAria")}
 								className="size-7 cursor-pointer rounded-full border-2 border-transparent p-1 transition-all duration-150 hover:border-border disabled:cursor-not-allowed disabled:opacity-40">
 								<Copy
 									strokeWidth={1.5}
@@ -221,7 +225,7 @@ function AssistantMessage({ message }: MessageProps) {
 							<button
 								type="button"
 								onClick={handleLike}
-								aria-label="پاسخ مفید بود"
+								aria-label={t("chat.likeAria")}
 								className="size-7 cursor-pointer rounded-full border-2 border-transparent p-1 transition-all duration-150 hover:border-border">
 								<ThumbsUp
 									strokeWidth={1.5}
@@ -232,7 +236,7 @@ function AssistantMessage({ message }: MessageProps) {
 							<button
 								type="button"
 								onClick={handleDislike}
-								aria-label="پاسخ مفید نبود"
+								aria-label={t("chat.dislikeAria")}
 								className="size-7 cursor-pointer rounded-full border-2 border-transparent p-1 transition-all duration-150 hover:border-border">
 								<ThumbsDown
 									strokeWidth={1.5}

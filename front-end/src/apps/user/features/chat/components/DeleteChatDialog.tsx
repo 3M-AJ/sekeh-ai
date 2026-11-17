@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { chatAPI } from "@/apps/user/features/chat/service/chatService";
@@ -12,6 +13,7 @@ import Dialog from "@/shared/components/ui/Dialog";
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 
 export default function DeleteChatDialog({ id }: { id: number }) {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(chatAPI.deleteChat);
 	const queryClient = useQueryClient();
 	const cancelButton = useRef(null);
@@ -26,7 +28,7 @@ export default function DeleteChatDialog({ id }: { id: number }) {
 				}
 
 				queryClient.invalidateQueries({ queryKey: ["chatHistory"] });
-			}
+			},
 		});
 	}
 
@@ -39,7 +41,7 @@ export default function DeleteChatDialog({ id }: { id: number }) {
 					<X strokeWidth={1.5} className="size-full text-primary-red" />
 				</div>
 			}
-			title="حذف چت"
+			title={t("chat.deleteTitle")}
 			footer={
 				<button
 					onClick={handleDelete}
@@ -49,7 +51,7 @@ export default function DeleteChatDialog({ id }: { id: number }) {
 					{isPending ? (
 						<LoaderCircle className="text-primary-red animate-spin" />
 					) : (
-						"حذف"
+						t("actions.delete")
 					)}
 				</button>
 			}
@@ -58,11 +60,13 @@ export default function DeleteChatDialog({ id }: { id: number }) {
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
 					hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<p className="text-primary-action">
-				عملیات حذف چت <span className="font-semibold">غیر قابل</span> برگشت است.
+				{t("chat.deleteConfirmPrefix")}{" "}
+				<span className="font-semibold">{t("chat.deleteIrreversible")}</span>{" "}
+				{t("chat.deleteConfirmSuffix")}
 			</p>
 		</Dialog>
 	);

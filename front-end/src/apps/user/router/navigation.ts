@@ -10,33 +10,33 @@ import type { NavItem } from "@/shared/components/layout";
 
 export const userMenuItems: NavItem[] = [
 	{
-		label: "پروفایل",
+		labelKey: "nav.profile",
 		path: "profile",
 		icon: User,
 	},
 	{
-		label: "پنل ادمین",
+		labelKey: "nav.adminPanel",
 		path: "admin",
 		icon: Settings,
 		to: "/admin/dashboard",
 	},
 	{
-		label: "ذخیره‌ها",
+		labelKey: "nav.marks",
 		path: "marks",
 		icon: Archive,
 	},
 	{
-		label: "چت‌ها",
+		labelKey: "nav.chats",
 		path: "chats",
 		icon: MessageCircle,
 	},
 	{
-		label: "رزومه‌ها",
+		labelKey: "nav.resumes",
 		path: "resume",
 		icon: File,
 	},
 	{
-		label: "ارتباط با ما",
+		labelKey: "nav.contact",
 		path: "contact-us",
 		icon: Phone,
 	},

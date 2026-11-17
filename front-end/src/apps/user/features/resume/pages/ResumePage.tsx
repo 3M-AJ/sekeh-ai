@@ -1,4 +1,5 @@
 import { FileText, LoaderCircle, Pencil, Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Components
 import ResumeForm from "@/apps/user/features/resume/components/ResumeForm";
@@ -9,6 +10,7 @@ import PageTitle from "@/shared/components/layout/PageTitle";
 import { useResumePage } from "@/apps/user/features/resume/hooks/useResumePage";
 
 export default function ResumePage() {
+	const { t } = useTranslation("common");
 	const {
 		formData,
 		editingId,
@@ -31,8 +33,8 @@ export default function ResumePage() {
 			<header className="flex max-md:flex-col max-md:items-start md:items-center justify-between gap-4">
 				<PageTitle
 					icon={FileText}
-					title="رزومه‌ها"
-					desc="رزومه‌های ذخیره‌شده خود را مدیریت کنید."
+					title={t("resume.pageTitle")}
+					desc={t("resume.pageDescription")}
 				/>
 
 				<div className="flex flex-wrap gap-2">
@@ -41,7 +43,7 @@ export default function ResumePage() {
 						type="button"
 						className="flex items-center gap-2 px-4 h-10 rounded-full bg-primary-action text-white font-semibold cursor-pointer">
 						<Plus className="size-4" />
-						<span>افزودن رزومه</span>
+						<span>{t("resume.add")}</span>
 					</button>
 				</div>
 			</header>
@@ -53,7 +55,7 @@ export default function ResumePage() {
 					</div>
 				) : resumes.length === 0 ? (
 					<div className="rounded-lg border border-dashed border-border p-8 text-center text-text-muted">
-						هنوز رزومه‌ای ذخیره نشده است.
+						{t("resume.empty")}
 					</div>
 				) : (
 					<div className="flex flex-col gap-3">
@@ -80,7 +82,7 @@ export default function ResumePage() {
 										{!isSinglePending ? (
 											<>
 												<Pencil className="size-4" />
-												<p>ویرایش</p>
+												<p>{t("resume.edit")}</p>
 											</>
 										) : (
 											<LoaderCircle className="size-5 animate-spin" />

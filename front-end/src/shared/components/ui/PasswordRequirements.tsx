@@ -4,6 +4,7 @@ import {
 	getPasswordRuleState,
 } from "@/shared/lib/formValidation";
 import { Check, Circle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface PasswordRequirementsProps {
 	value: string;
@@ -12,21 +13,25 @@ interface PasswordRequirementsProps {
 export default function PasswordRequirements({
 	value,
 }: PasswordRequirementsProps) {
+	const { t } = useTranslation("common");
 	const rules = getPasswordRuleState(value);
 	const requirements = [
 		{
-			label: `بین ${PASSWORD_MIN_LENGTH} تا ${PASSWORD_MAX_LENGTH} کاراکتر`,
+			label: t("passwordRules.lengthRange", {
+				min: PASSWORD_MIN_LENGTH,
+				max: PASSWORD_MAX_LENGTH,
+			}),
 			isMet: rules.hasValidLength,
 		},
-		{ label: "حداقل یک حرف", isMet: rules.hasLetter },
-		{ label: "حداقل یک عدد", isMet: rules.hasNumber },
-		{ label: "بدون فاصله", isMet: rules.hasNoWhitespace },
+		{ label: t("passwordRules.minLetter"), isMet: rules.hasLetter },
+		{ label: t("passwordRules.minNumber"), isMet: rules.hasNumber },
+		{ label: t("passwordRules.noWhitespace"), isMet: rules.hasNoWhitespace },
 	];
 
 	return (
 		<ul
 			className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2"
-			aria-label="قوانین رمز عبور">
+			aria-label={t("passwordRules.ariaLabel")}>
 			{requirements.map((requirement) => (
 				<li
 					key={requirement.label}

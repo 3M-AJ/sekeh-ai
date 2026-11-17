@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { PenBox } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { chatAPI } from "@/apps/user/features/chat/service/chatService";
@@ -16,6 +17,7 @@ import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 // import LoadingIcon from "../../assets/icons/LoadingIcon";
 
 export default function NewChatDialog() {
+	const { t } = useTranslation("common");
 	const queryClient = useQueryClient();
 	const { mutate } = useCustomMutation(chatAPI.newChat, {
 		onSuccess: (res) => {
@@ -42,7 +44,7 @@ export default function NewChatDialog() {
 		// 	trigger={
 		<GrowableButton
 			onClick={handleNewChat}
-			label="چت جدید"
+			label={t("chat.newChat")}
 			icon={
 				<PenBox
 					strokeWidth={1.5}

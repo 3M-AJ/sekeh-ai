@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { initI18n } from "@/shared/i18n";
 import {
 	getPasswordError,
 	getPasswordRuleState,
 	getUsernameError,
 } from "@/shared/lib/formValidation";
+
+initI18n();
 
 describe("username validation", () => {
 	it("accepts Persian and Latin usernames with supported separators", () => {

@@ -15,6 +15,7 @@ import {
 	type ActiveExchange,
 } from "@/apps/user/features/chat/utils/chatMessageUtils";
 import { getRequiredError, sanitizeText } from "@/shared/lib/formValidation";
+import i18n from "@/shared/i18n";
 
 interface UseChatComposerOptions {
 	chatId?: string;
@@ -48,14 +49,15 @@ export function useChatComposer({
 
 	async function handleSubmit() {
 		if (isBusy) {
-			setError(
-				"در حال ارسال یا دریافت پیام هستیم. ابتدا پاسخ فعلی را متوقف کنید.",
-			);
+			setError(i18n.t("chat.busy"));
 			return;
 		}
 
 		const userContent = sanitizeText(inputData);
-		const validationError = getRequiredError(userContent, "پیام");
+		const validationError = getRequiredError(
+			userContent,
+			i18n.t("chat.messageFieldName"),
+		);
 		if (validationError) {
 			setError(validationError);
 			return;
@@ -96,7 +98,7 @@ export function useChatComposer({
 						? { status: "stopped", error: undefined }
 						: {
 								status: "failed",
-								error: result.error ?? "ارسال پیام با خطا مواجه شد.",
+								error: result.error ?? i18n.t("chat.sendFailed"),
 							};
 			return updateMessageById(
 				current,
@@ -118,7 +120,7 @@ export function useChatComposer({
 			requestAnimationFrame(focusTextarea);
 		} catch (resumeError) {
 			console.error(resumeError);
-			setError("رزومه انتخاب‌شده در دسترس نبود. لطفاً دوباره تلاش کنید.");
+			setError(i18n.t("chat.resumeUnavailable"));
 		}
 	}
 

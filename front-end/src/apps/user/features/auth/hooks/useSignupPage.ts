@@ -13,6 +13,7 @@ import {
 	getUsernameError,
 	sanitizeText,
 } from "@/shared/lib/formValidation";
+import i18n from "@/shared/i18n";
 
 export interface SignupForm {
 	username: string;
@@ -37,9 +38,9 @@ export function useSignupPage() {
 		username: getUsernameError(form.username),
 		password: getPasswordError(form.password),
 		confirm: !form.confirm
-			? "تکرار رمز عبور الزامی است."
+			? i18n.t("auth.signup.confirmRequired")
 			: form.password !== form.confirm
-				? "رمز عبور و تکرار آن یکسان نیست."
+				? i18n.t("auth.signup.confirmMismatch")
 				: "",
 	};
 	const isFormValid = Object.values(validationErrors).every((error) => !error);

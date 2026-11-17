@@ -1,6 +1,7 @@
 import { cn } from "@/shared/lib/cn";
 import { Eye, EyeOff } from "lucide-react";
 import { useId, useState, type ComponentProps } from "react";
+import { useTranslation } from "react-i18next";
 
 export interface PasswordInputProps
 	extends Omit<ComponentProps<"input">, "type"> {
@@ -18,6 +19,7 @@ export default function PasswordInput({
 	required,
 	...props
 }: PasswordInputProps) {
+	const { t } = useTranslation("common");
 	const generatedId = useId();
 	const inputId = id ?? generatedId;
 	const descriptionId = `${inputId}-description`;
@@ -51,7 +53,11 @@ export default function PasswordInput({
 				<button
 					type="button"
 					onClick={() => setIsVisible((visible) => !visible)}
-					aria-label={isVisible ? "پنهان کردن رمز عبور" : "نمایش رمز عبور"}
+					aria-label={
+						isVisible
+							? t("passwordRules.hidePasswordAria")
+							: t("passwordRules.showPasswordAria")
+					}
 					aria-pressed={isVisible}
 					className="absolute inset-y-0 end-0 flex w-10 cursor-pointer items-center justify-center rounded-e-md text-text-muted transition-colors hover:text-primary-text focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent">
 					{isVisible ? (

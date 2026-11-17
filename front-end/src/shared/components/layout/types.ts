@@ -3,7 +3,8 @@ import type { ReactNode } from "react";
 
 export interface NavItem {
 	path: string;
-	label: string;
+	/** i18n key under the common namespace, e.g. nav.profile */
+	labelKey: string;
 	icon: LucideIcon;
 	/** Absolute path override (e.g. /admin/dashboard) */
 	to?: string;

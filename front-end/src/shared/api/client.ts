@@ -1,6 +1,9 @@
 import axios from "axios";
 import type { AxiosResponse } from "axios";
+import i18n from "@/shared/i18n";
 import { toast } from "@/shared/lib/toast";
+import { removeTokens } from "@/shared/lib/authTokens";
+import { getStorageItem, setStorageItem } from "@/shared/lib/storage";
 
 interface ApiResponse<T> {
 	status: "200" | "201";
@@ -28,13 +31,13 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-	const token = localStorage.getItem("access_token");
+	const token = getStorageItem("accessToken");
 	if (token) config.headers.Authorization = `Bearer ${token}`;
 	return config;
 });
 
 const getNewToken = async () => {
-	const refreshToken = localStorage.getItem("refresh_token");
+	const refreshToken = getStorageItem("refreshToken");
 
 	const res = await axios.post<
 		RefreshTokenResponse,
@@ -68,17 +71,16 @@ api.interceptors.response.use(
 
 				const { accessToken, refreshToken } = refreshResponse.data;
 
-				localStorage.setItem("access_token", accessToken);
-
-				localStorage.setItem("refresh_token", refreshToken);
+				setStorageItem("accessToken", accessToken);
+				setStorageItem("refreshToken", refreshToken);
 
 				originalRequest.headers.Authorization = `Bearer ${accessToken}`;
 
 				return api(originalRequest);
 			} catch (err) {
-				localStorage.clear();
+				removeTokens();
 
-				toast.error("لطفا مجددا وارد حساب کاربری خود شوید.");
+				toast.error(i18n.t("toasts:auth.error.reloginRequired"));
 
 				setTimeout(() => {
 					window.dispatchEvent(new Event("unauthorized"));

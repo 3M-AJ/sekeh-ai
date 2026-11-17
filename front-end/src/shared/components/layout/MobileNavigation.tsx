@@ -41,7 +41,7 @@ export default function MobileNavigation({
 			</label>
 			<section
 				className="fixed w-1/2 h-dvh top-17 start-0
-				translate-x-full peer-checked:translate-x-0 transition-all duration-150 z-20">
+				ltr:-translate-x-full rtl:translate-x-full peer-checked:translate-x-0 transition-all duration-150 z-20">
 				<Sidebar items={items} footer={footer} />
 			</section>
 			<label

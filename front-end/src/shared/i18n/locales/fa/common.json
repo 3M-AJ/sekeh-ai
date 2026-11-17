@@ -1,0 +1,91 @@
+{
+	"brand": {
+		"name": "سکه",
+		"titlePrefix1": "سـ.",
+		"titleMid1": "امانه",
+		"titlePrefix2": "کـ.",
+		"titleMid2": "اریابی",
+		"titlePrefix3": "هـ.",
+		"titleMid3": "وشمند",
+		"titleSimple": "سکه",
+		"taglineFooter": "© 2026 Seke — AI-Powered Job Discovery Platform"
+	},
+	"theme": {
+		"switchToLightAria": "تغییر به حالت روشن",
+		"switchToDarkAria": "تغییر به حالت تاریک",
+		"lightTitle": "حالت روشن",
+		"darkTitle": "حالت تاریک"
+	},
+	"language": {
+		"title": "زبان",
+		"triggerAria": "تغییر زبان",
+		"persian": "فارسی",
+		"english": "English"
+	},
+	"dialog": {
+		"closeAria": "بستن پنجره",
+		"areYouSure": "آیا مطمئن هستید؟"
+	},
+	"actions": {
+		"cancel": "انصراف",
+		"confirm": "تایید",
+		"back": "بازگشت",
+		"save": "ذخیره",
+		"submit": "ثبت",
+		"delete": "حذف",
+		"edit": "ویرایش",
+		"continue": "ادامه",
+		"yes": "بله",
+		"no": "خیر"
+	},
+	"loading": {
+		"generic": "کمی صبر کنید...",
+		"route": "در حال بارگذاری"
+	},
+	"notFound": {
+		"code": "404",
+		"title": "صفحه مورد نظر پیدا نشد",
+		"backHome": "بازگشت به صفحه اصلی"
+	},
+	"jobs": {
+		"details": "جزییات",
+		"back": "بازگشت",
+		"link": "لینک",
+		"detailsHeading": "جزییات :",
+		"company": "شرکت :",
+		"source": "منبع :",
+		"salaryRange": "بازه حقوق :",
+		"reviews": "نظرات :",
+		"reviewParticipants": "({{count}} شرکت کننده)",
+		"requirements": "نیازمندی‌ها:",
+		"emptyValue": "—"
+	},
+	"validation": {
+		"required": "{{label}} الزامی است.",
+		"defaultFieldLabel": "این فیلد",
+		"usernameRequired": "نام کاربری الزامی است.",
+		"usernameMinLength": "نام کاربری باید حداقل {{min}} کاراکتر باشد.",
+		"usernameMaxLength": "نام کاربری نمی‌تواند بیشتر از {{max}} کاراکتر باشد.",
+		"usernameMustStartWithLetter": "نام کاربری باید با یک حرف شروع شود.",
+		"usernameMustEndWithLetterOrNumber": "نام کاربری باید با حرف یا عدد پایان یابد.",
+		"usernameInvalidChars": "فقط حروف، اعداد، نقطه، خط تیره و زیرخط مجاز هستند.",
+		"emailRequired": "ایمیل الزامی است.",
+		"emailInvalid": "لطفاً یک ایمیل معتبر وارد کنید.",
+		"passwordRequired": "رمز عبور الزامی است.",
+		"passwordLengthRange": "رمز عبور باید بین {{min}} تا {{max}} کاراکتر باشد.",
+		"passwordNoWhitespace": "رمز عبور نباید شامل فاصله باشد.",
+		"passwordNeedsLetterAndNumber": "رمز عبور باید شامل حروف و اعداد باشد.",
+		"phoneRequired": "شماره تلفن الزامی است.",
+		"phoneInvalid": "شماره تلفن معتبر وارد کنید.",
+		"phoneLengthRange": "شماره تلفن باید بین 7 تا 15 رقم باشد."
+	},
+	"passwordRules": {
+		"ariaLabel": "قوانین رمز عبور",
+		"lengthRange": "بین {{min}} تا {{max}} کاراکتر",
+		"minLetter": "حداقل یک حرف",
+		"minNumber": "حداقل یک عدد",
+		"noWhitespace": "بدون فاصله",
+		"showPasswordAria": "نمایش رمز عبور",
+		"hidePasswordAria": "پنهان کردن رمز عبور"
+	}
+}

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle, PenBoxIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { chatAPI } from "@/apps/user/features/chat/service/chatService";
@@ -15,6 +16,7 @@ import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 import { getRequiredError, sanitizeText } from "@/shared/lib/formValidation";
 
 export default function EditChatDialog({ id }: { id: number }) {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(chatAPI.editTitle, {
 		onSuccess: () => {
 			if (cancelButton.current) {
@@ -31,7 +33,7 @@ export default function EditChatDialog({ id }: { id: number }) {
 	const cancelButton = useRef(null);
 
 	function handleEdit() {
-		const nextError = getRequiredError(formData, "عنوان چت");
+		const nextError = getRequiredError(formData, t("chat.titleFieldName"));
 		if (nextError) {
 			setError(nextError);
 			return;
@@ -53,7 +55,7 @@ export default function EditChatDialog({ id }: { id: number }) {
 					/>
 				</div>
 			}
-			title="ویرایش چت"
+			title={t("chat.editTitle")}
 			footer={
 				<button
 					type="submit"
@@ -63,7 +65,7 @@ export default function EditChatDialog({ id }: { id: number }) {
 					{isPending ? (
 						<LoaderCircle className={`text-accent! animate-spin`} />
 					) : (
-						"تایید"
+						t("actions.confirm")
 					)}
 				</button>
 			}
@@ -72,7 +74,7 @@ export default function EditChatDialog({ id }: { id: number }) {
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
           hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<form
@@ -82,10 +84,12 @@ export default function EditChatDialog({ id }: { id: number }) {
 				}}
 				id="edit-chat-form"
 				className="flex flex-col gap-2">
-				<label className="text-[16px] text-primary-action">عنوان</label>
+				<label className="text-[16px] text-primary-action">
+					{t("chat.titleLabel")}
+				</label>
 				<input
 					className={`border-2 rounded-md py-2 px-2 w-80 outline-0 ${error ? "border-red-500" : "border-border"}`}
-					placeholder="چت جدید"
+					placeholder={t("chat.titlePlaceholder")}
 					value={formData}
 					onChange={(e) => {
 						setFormData(e.target.value);

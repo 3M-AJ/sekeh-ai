@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { PenBoxIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Types
 import type { UserForm } from "@/apps/user/features/profile/types";
@@ -36,6 +37,7 @@ export default function EditProfileDialog({
 }: {
 	refetch: () => void;
 }) {
+	const { t } = useTranslation("common");
 	const { profile } = useProfile();
 
 	const [form, setForm] = useState<UserForm>({
@@ -50,7 +52,7 @@ export default function EditProfileDialog({
 	const { updateProfile } = profileAPI;
 	const { mutate } = useCustomMutation(updateProfile, {
 		onSuccess: () => {
-			toast.success("پروفایل شما با موفقیت ثبت شد.");
+			toast.success(t("toasts:profile.success.updated"));
 			refetch();
 		},
 	});
@@ -87,7 +89,10 @@ export default function EditProfileDialog({
 		const parsedPhone = phoneValue ? parsePhoneNumber(phoneValue) : null;
 
 		if (!username)
-			nextErrors.username = getRequiredError(form.username, "نام کاربری");
+			nextErrors.username = getRequiredError(
+				form.username,
+				t("profile.usernameLabel"),
+			);
 		if (getEmailError(email)) nextErrors.email = getEmailError(email);
 		if (phoneValue) {
 			const phoneError = getPhoneError(phoneValue);
@@ -113,17 +118,17 @@ export default function EditProfileDialog({
 			trigger={
 				<Button variant="default">
 					<PenBoxIcon strokeWidth={1.5} className="size-5" />
-					<span>ویرایش پروفایل</span>
+					<span>{t("profile.editTrigger")}</span>
 				</Button>
 			}
-			title="ویرایش پروفایل"
+			title={t("profile.editTitle")}
 			footer={
 				<button
 					type="submit"
 					onClick={handleUpdate}
 					className="py-1 px-3 border-2 border-accent text-accent rounded-md font-semibold cursor-pointer
                 hover:bg-accent hover:text-white transition-all duration-150">
-					ثبت
+					{t("actions.submit")}
 				</button>
 			}
 			closeButton={
@@ -131,7 +136,7 @@ export default function EditProfileDialog({
 					type="button"
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
                 hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<form
@@ -139,7 +144,9 @@ export default function EditProfileDialog({
 				className="flex flex-col items-center gap-10">
 				<section className="grid grid-cols-2 w-full gap-5">
 					<div className="flex flex-col gap-2">
-						<label className="text-[16px] text-primary-action">نام کاربی</label>
+						<label className="text-[16px] text-primary-action">
+							{t("profile.usernameLabel")}
+						</label>
 						<input
 							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.username ? "border-red-500" : "border-border"}`}
 							placeholder=""
@@ -152,11 +159,11 @@ export default function EditProfileDialog({
 					</div>
 					<div className="flex flex-col gap-2">
 						<label className="text-[16px] text-primary-action">
-							شماره تلفن
+							{t("profile.phoneFieldLabel")}
 						</label>
 						<input
 							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.phone_number ? "border-red-500" : "border-border"}`}
-							placeholder="09876543210"
+							placeholder={t("profile.phonePlaceholder")}
 							value={phoneInput}
 							onChange={(e) => handlePhoneChange(e.target.value)}
 						/>
@@ -166,11 +173,11 @@ export default function EditProfileDialog({
 					</div>
 					<div className="flex flex-col gap-2 col-span-2">
 						<label className="text-[16px] text-primary-action">
-							آدرس ایمیل
+							{t("profile.emailFieldLabel")}
 						</label>
 						<input
 							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.email ? "border-red-500" : "border-border"}`}
-							placeholder="example@gmail.com"
+							placeholder={t("profile.emailPlaceholder")}
 							value={form.email ?? ""}
 							onChange={(e) => hableChange("email", e.target.value)}
 						/>

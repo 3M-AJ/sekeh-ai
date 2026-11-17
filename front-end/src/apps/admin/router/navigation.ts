@@ -3,25 +3,25 @@ import type { NavItem } from "@/shared/components/layout";
 
 export const adminMenuItems: NavItem[] = [
 	{
-		label: "داشبورد",
+		labelKey: "nav.dashboard",
 		path: "dashboard",
 		icon: LayoutDashboard,
 		to: "/admin/dashboard",
 	},
 	{
-		label: "کاربران",
+		labelKey: "nav.users",
 		path: "users",
 		icon: Users,
 		to: "/admin/users",
 	},
 	{
-		label: "مشاغل",
+		labelKey: "nav.jobs",
 		path: "jobs",
 		icon: Briefcase,
 		to: "/admin/jobs",
 	},
 	{
-		label: "بازگشت به اپ",
+		labelKey: "nav.backToApp",
 		path: "chats",
 		icon: MessageCircle,
 		to: "/chats",

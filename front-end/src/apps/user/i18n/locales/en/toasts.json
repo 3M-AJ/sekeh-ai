@@ -1,0 +1,32 @@
+{
+	"chat": {
+		"success": {
+			"copied": "Message copied successfully."
+		},
+		"error": {
+			"nothingToCopy": "There is no text to copy.",
+			"copyFailed": "Failed to copy the message. Please try again."
+		}
+	},
+	"profile": {
+		"success": {
+			"updated": "Your profile was saved successfully.",
+			"passwordChanged": "Your password was updated successfully."
+		},
+		"error": {}
+	},
+	"resume": {
+		"success": {
+			"created": "New resume saved successfully.",
+			"updated": "Resume updated successfully."
+		},
+		"error": {}
+	},
+	"marks": {
+		"success": {
+			"saved": "Saved successfully.",
+			"removed": "Removed successfully."
+		},
+		"error": {}
+	}
+}

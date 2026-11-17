@@ -3,6 +3,7 @@ import type {
 	MessageStatus,
 } from "@/apps/user/features/chat/types";
 import type { ChatStreamStatus } from "@/apps/user/features/chat/hooks/useChatStream";
+import i18n from "@/shared/i18n";
 
 export interface ActiveExchange {
 	userMessageId: string;
@@ -36,7 +37,7 @@ export function getUserMessageState({
 		case "failed":
 			return {
 				status: "failed",
-				error: streamError ?? "ارسال پیام با خطا مواجه شد.",
+				error: streamError ?? i18n.t("chat.sendFailed"),
 			};
 
 		case "stopped":
@@ -84,7 +85,7 @@ export function buildAssistantMessage({
 		status: messageStatus,
 		error:
 			status === "failed"
-				? (streamError ?? "دریافت پاسخ با خطا مواجه شد.")
+				? (streamError ?? i18n.t("chat.streamFailed"))
 				: undefined,
 		job_cards: hasJobs ? jobs : undefined,
 	};
@@ -132,16 +133,16 @@ export function getAssistantContent({
 	switch (status) {
 		case "waiting":
 		case "streaming":
-			return "در حال آماده‌سازی پاسخ شما...";
+			return i18n.t("chat.preparingReply");
 
 		case "failed":
-			return streamError ?? "دریافت پاسخ با خطا مواجه شد.";
+			return streamError ?? i18n.t("chat.streamFailed");
 
 		case "stopped":
-			return "تولید پاسخ متوقف شد.";
+			return i18n.t("chat.generationStopped");
 
 		case "completed":
-			return hasJobs ? "" : "پاسخی از سرور دریافت نشد.";
+			return hasJobs ? "" : i18n.t("chat.noServerReply");
 
 		default:
 			return "";

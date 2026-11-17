@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { LoaderCircle, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 // Services
 import { resumeAPI } from "@/apps/user/features/resume/service/resumeService";
@@ -12,6 +13,7 @@ import Dialog from "@/shared/components/ui/Dialog";
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 
 export default function DeleteResumeDialog({ id }: { id: number | string }) {
+	const { t } = useTranslation("common");
 	const { mutate, isPending } = useCustomMutation(resumeAPI.deleteResume, {
 		onSuccess: () => {
 			if (cancelButton.current) {
@@ -36,7 +38,7 @@ export default function DeleteResumeDialog({ id }: { id: number | string }) {
 					<X strokeWidth={1.5} className="size-full text-primary-red" />
 				</div>
 			}
-			title="حذف رزومه"
+			title={t("resume.deleteTitle")}
 			footer={
 				<button
 					onClick={handleDelete}
@@ -46,7 +48,7 @@ export default function DeleteResumeDialog({ id }: { id: number | string }) {
 					{isPending ? (
 						<LoaderCircle className="ttext-primary-red animate-spin" />
 					) : (
-						"حذف"
+						t("actions.delete")
 					)}
 				</button>
 			}
@@ -54,12 +56,13 @@ export default function DeleteResumeDialog({ id }: { id: number | string }) {
 				<button
 					ref={cancelButton}
 					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer hover:bg-primary-action hover:text-white transition-all duration-150">
-					بازگشت
+					{t("actions.back")}
 				</button>
 			}>
 			<p className="text-primary-action">
-				عملیات حذف رزومه <span className="font-semibold">غیر قابل</span> برگشت
-				است.
+				{t("resume.deleteConfirmPrefix")}{" "}
+				<span className="font-semibold">{t("resume.deleteIrreversible")}</span>{" "}
+				{t("resume.deleteConfirmSuffix")}
 			</p>
 		</Dialog>
 	);
