@@ -8,6 +8,9 @@ import { chatAPI } from "@/apps/user/features/chat/service/chatService";
 import NewChatDialog from "@/apps/user/features/chat/components/NewChatDialog";
 import HistoryCard from "@/apps/user/features/chat/components/ChatHistoryCard";
 import PageTitle from "@/shared/components/layout/PageTitle";
+import Section from "@/shared/components/layout/Section";
+import EmptyState from "@/shared/components/feedback/EmptyState";
+import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
 
 // Hooks
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
@@ -23,34 +26,31 @@ export default function ChatHistoryPage() {
 	const hasChats = chats.length > 0;
 
 	return (
-		<div className="p-7 overflow-y-auto overflow-x-hidden w-full h-full scrollbar-gray flex flex-col gap-5">
-			<PageTitle
-				icon={MessageSquareText}
-				title={t("chat.historyTitle")}
-				desc={t("chat.historyDescription")}
-			/>
-
-			<menu className="absolute top-25 end-5 flex flex-col items-end gap-3 z-3">
-				<NewChatDialog />
-			</menu>
-
-			{isPending || hasChats ? (
-				<main className="grid grid-cols-5 max-[1100px]:grid-cols-3 max-md:grid-cols-1 gap-5 ">
-					{isPending
-						? Array(10)
-								.fill("")
-								.map((_, index) => (
-									<div
-										key={index}
-										className="h-70 w-full rounded-lg bg-border/70 animate-pulse"></div>
-								))
-						: chats.map((h) => <HistoryCard card={h} key={h.chat_id} />)}
-				</main>
-			) : (
-				<div className="flex flex-col items-center justify-center h-full">
-					<p className="text-text-muted">{t("chat.historyEmpty")}</p>
+		<Section
+			title={
+				<PageTitle
+					icon={MessageSquareText}
+					title={t("chat.historyTitle")}
+					desc={t("chat.historyDescription")}
+				/>
+			}
+			header={<NewChatDialog />}>
+			{isPending ? (
+				<LoadingBlock
+					variant="pulse"
+					count={10}
+					className="grid grid-cols-5 gap-5 max-[1100px]:grid-cols-3 max-md:grid-cols-1"
+					pulseClassName="h-70"
+				/>
+			) : hasChats ? (
+				<div className="grid grid-cols-5 gap-5 max-[1100px]:grid-cols-3 max-md:grid-cols-1">
+					{chats.map((h) => (
+						<HistoryCard card={h} key={h.chat_id} />
+					))}
 				</div>
+			) : (
+				<EmptyState message={t("chat.historyEmpty")} icon={MessageSquareText} />
 			)}
-		</div>
+		</Section>
 	);
 }

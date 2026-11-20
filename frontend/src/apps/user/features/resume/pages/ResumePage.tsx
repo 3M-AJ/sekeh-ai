@@ -5,6 +5,11 @@ import { useTranslation } from "react-i18next";
 import ResumeForm from "@/apps/user/features/resume/components/ResumeForm";
 import DeleteDialog from "@/apps/user/features/resume/components/DeleteResumeDialog";
 import PageTitle from "@/shared/components/layout/PageTitle";
+import Section from "@/shared/components/layout/Section";
+import GrowableButton from "@/shared/components/ui/GrowableButton";
+import Button from "@/shared/components/ui/Button";
+import EmptyState from "@/shared/components/feedback/EmptyState";
+import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
 
 // Hooks
 import { useResumePage } from "@/apps/user/features/resume/hooks/useResumePage";
@@ -29,72 +34,75 @@ export default function ResumePage() {
 	} = useResumePage();
 
 	return (
-		<div className="md:p-7 max-md:py-5 max-md:px-6 flex flex-col gap-8 w-full">
-			<header className="flex max-md:flex-col max-md:items-start md:items-center justify-between gap-4">
-				<PageTitle
-					icon={FileText}
-					title={t("resume.pageTitle")}
-					desc={t("resume.pageDescription")}
-				/>
-
-				<div className="flex flex-wrap gap-2">
-					<button
+		<>
+			<Section
+				title={
+					<PageTitle
+						icon={FileText}
+						title={t("resume.pageTitle")}
+						desc={t("resume.pageDescription")}
+					/>
+				}
+				header={
+					<GrowableButton
 						onClick={openDialog}
-						type="button"
-						className="flex items-center gap-2 px-4 h-10 rounded-full bg-primary-action text-white font-semibold cursor-pointer">
-						<Plus className="size-4" />
-						<span>{t("resume.add")}</span>
-					</button>
-				</div>
-			</header>
-
-			<section className="flex flex-col gap-4">
+						label={t("resume.add")}
+						icon={
+							<Plus
+								strokeWidth={1.5}
+								className="size-5 text-primary-action transition-colors duration-200 group-hover:text-on-accent group-focus-visible:text-on-accent"
+							/>
+						}
+					/>
+				}>
 				{isLoading ? (
-					<div className="flex items-center justify-center py-10">
-						<LoaderCircle className="size-6 animate-spin text-accent" />
-					</div>
+					<LoadingBlock
+						variant="pulse"
+						count={3}
+						pulseClassName="h-30"
+					/>
 				) : resumes.length === 0 ? (
-					<div className="rounded-lg border border-dashed border-border p-8 text-center text-text-muted">
-						{t("resume.empty")}
-					</div>
+					<EmptyState message={t("resume.empty")} icon={FileText} dashed />
 				) : (
 					<div className="flex flex-col gap-3">
 						{resumes.map((resume) => (
 							<div
 								key={resume.id}
-								className="border border-border rounded-lg p-4 flex flex-col gap-3 bg-background">
+								className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
 								<div className="flex items-start justify-between gap-3">
 									<div>
 										<p className="font-semibold text-primary-text">
 											{resume.title}
 										</p>
-										<p className="text-sm text-text-muted mt-1 line-clamp-3">
+										<p className="mt-1 line-clamp-3 text-sm text-text-muted">
 											{resume.content}
 										</p>
 									</div>
 								</div>
 
 								<div className="flex flex-wrap gap-2">
-									<button
+									<Button
 										type="button"
+										variant="outline"
+										size="sm"
 										onClick={() => setEditingId(resume.id)}
-										className="flex items-center gap-1 px-3 h-9 rounded-full border border-border cursor-pointer">
+										disabled={isSinglePending}>
 										{!isSinglePending ? (
 											<>
 												<Pencil className="size-4" />
-												<p>{t("resume.edit")}</p>
+												<span>{t("resume.edit")}</span>
 											</>
 										) : (
 											<LoaderCircle className="size-5 animate-spin" />
 										)}
-									</button>
+									</Button>
 									<DeleteDialog id={resume.id} />
 								</div>
 							</div>
 						))}
 					</div>
 				)}
-			</section>
+			</Section>
 
 			<ResumeForm
 				open={isOpen}
@@ -107,6 +115,6 @@ export default function ResumePage() {
 				isPending={isPending}
 				errors={errors}
 			/>
-		</div>
+		</>
 	);
 }

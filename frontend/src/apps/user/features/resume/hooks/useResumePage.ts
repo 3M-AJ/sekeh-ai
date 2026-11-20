@@ -8,7 +8,6 @@ import {
 } from "@/apps/user/features/resume/service/resumeService";
 
 // Hooks
-import { useDialogContext } from "@/app/contexts/useDialogContext";
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
 
@@ -17,14 +16,19 @@ import { getRequiredError, sanitizeText } from "@/shared/lib/formValidation";
 import { toast } from "@/shared/lib/toast";
 import i18n from "@/shared/i18n";
 
+const emptyForm: ResumeFormObject = {
+	title: "",
+	content: "",
+};
+
 export function useResumePage() {
-	const [formData, setFormData] = useState<ResumeFormObject>({
-		title: "",
-		content: "",
-	});
+	const [formData, setFormData] = useState<ResumeFormObject>(emptyForm);
 	const [editingId, setEditingId] = useState<number | string | null>(null);
-	const [errors, setErrors] = useState<{ title?: string; content?: string }>({});
-	const { isOpen, closeDialog, openDialog } = useDialogContext();
+	const [errors, setErrors] = useState<{ title?: string; content?: string }>(
+		{},
+	);
+	const [isOpen, setIsOpen] = useState(false);
+
 	const { data, isLoading } = useCustomQuery({
 		key: ["resumes"],
 		func: resumeAPI.getResumes,
@@ -36,16 +40,26 @@ export function useResumePage() {
 		options: { enabled: !!editingId },
 	});
 
+	const openDialog = () => {
+		setErrors({});
+		setIsOpen(true);
+	};
+
+	const closeDialog = () => {
+		setIsOpen(false);
+		setEditingId(null);
+		setErrors({});
+		setFormData(emptyForm);
+	};
+
 	useEffect(() => {
-		if (!singleResume) return;
-		(() => {
-			setFormData({
-				title: singleResume.data.title,
-				content: singleResume.data.content,
-			});
-			openDialog();
-		})();
-	}, [singleResume, openDialog]);
+		if (!singleResume || !editingId) return;
+		setFormData({
+			title: singleResume.data.title,
+			content: singleResume.data.content,
+		});
+		setIsOpen(true);
+	}, [singleResume, editingId]);
 
 	const createMutation = useCustomMutation(
 		resumeAPI.createResume,
@@ -53,8 +67,6 @@ export function useResumePage() {
 			onSuccess: () => {
 				toast.success(i18n.t("toasts:resume.success.created"));
 				closeDialog();
-				setErrors({});
-				setFormData({ title: "", content: "" });
 			},
 		},
 		["resumes"],
@@ -65,13 +77,12 @@ export function useResumePage() {
 		{
 			onSuccess: () => {
 				toast.success(i18n.t("toasts:resume.success.updated"));
-				setEditingId(null);
-				setErrors({});
-				setFormData({ title: "", content: "" });
+				closeDialog();
 			},
 		},
 		["resumes"],
 	);
+
 	const validate = !!(
 		sanitizeText(formData.title) && sanitizeText(formData.content)
 	);
@@ -83,17 +94,6 @@ export function useResumePage() {
 		setFormData((current) => ({ ...current, [key]: value }));
 		setErrors((current) => ({ ...current, [key]: undefined }));
 	};
-
-	useEffect(() => {
-		const reset = () => {
-			setEditingId(null);
-			setErrors({});
-			setFormData({ title: "", content: "" });
-		};
-		if (isOpen) openDialog();
-		else closeDialog();
-		reset();
-	}, [isOpen, closeDialog, openDialog]);
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();

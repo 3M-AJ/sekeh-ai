@@ -2,6 +2,7 @@ import { cn } from "@/shared/lib/cn";
 import { Eye, EyeOff } from "lucide-react";
 import { useId, useState, type ComponentProps } from "react";
 import { useTranslation } from "react-i18next";
+import { fieldClassName } from "@/shared/components/ui/Input";
 
 export interface PasswordInputProps
 	extends Omit<ComponentProps<"input">, "type"> {
@@ -44,7 +45,8 @@ export default function PasswordInput({
 					aria-invalid={Boolean(error)}
 					aria-describedby={error || hint ? descriptionId : undefined}
 					className={cn(
-						"h-10 w-full rounded-md border-2 bg-background px-3 pe-11 text-base text-primary-text outline-none transition-colors placeholder:text-text-muted focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/20 disabled:cursor-not-allowed disabled:opacity-50",
+						fieldClassName,
+						"pe-11",
 						error ? "border-primary-red" : "border-border",
 						className,
 					)}

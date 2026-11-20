@@ -12,12 +12,12 @@ import { ThemeToggle } from "@/shared/theme";
 
 export default function AppShell({ items, footer }: AppShellProps) {
 	return (
-		<div className="h-dvh w-screen bg-surface flex" id="main-container">
+		<div className="flex h-dvh w-full max-w-full overflow-x-hidden bg-surface" id="main-container">
 			<DesktopNavigation items={items} footer={footer} />
-			<div className="flex flex-col h-dvh w-full">
-				<header className="bg-background md:pe-5 max-md:px-3 flex h-(--navbar-height) shrink-0 items-center max-md:gap-7">
+			<div className="flex h-dvh w-full min-w-0 flex-col">
+				<header className="flex h-(--navbar-height) shrink-0 items-center bg-background max-md:gap-7 max-md:px-3 md:pe-5">
 					<MobileNavigation items={items} footer={footer} />
-					<Title mianColor="accent" subColor="primary-text" />
+					<Title mainColor="accent" subColor="primary-text" />
 					<div className="ms-auto flex items-center gap-2">
 						<LanguageSwitcher />
 						<ThemeToggle />

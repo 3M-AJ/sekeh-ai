@@ -7,10 +7,13 @@ import {
 
 interface DialogContextValue {
 	isOpen: boolean;
-	openDialog: () => void;
+	activeId: string | null;
+	openDialog: (id: string) => void;
 	closeDialog: () => void;
 	setContent: Dispatch<SetStateAction<React.ReactNode | null>>;
 	DialogContent: React.ReactNode;
+	setOnClose: (callback: (() => void) | null) => void;
+	panelRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export const DialogContext = createContext<DialogContextValue | undefined>(

@@ -1,10 +1,12 @@
 import iconSrc from "@/assets/sekeh-icon.png";
+import { cn } from "@/shared/lib/cn";
 
 export default function MainIcon({ className }: { className?: string }) {
 	return (
-		<div className={`${className}`}>
+		<div className={cn(className)}>
 			<img
-				className="size-full object-contain pointer-events-none select-none"
+				alt=""
+				className="pointer-events-none size-full select-none object-contain"
 				src={iconSrc}
 			/>
 		</div>

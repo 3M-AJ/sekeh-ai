@@ -12,28 +12,22 @@ import { formatDate } from "@/shared/lib/date";
 
 export default function ChatHistoryCard({ card }: { card: ChatObject }) {
 	return (
-		<div className="group relative rounded-lg shadow-md shadow-border h-70 w-full">
-			<span className="absolute z-0 top-0 end-0 bg-linear-30 from-background/30 to-background/50 size-full rounded-lg transition-all duration-150 opacity-100 group-hover:opacity-0"></span>
-			<span className="absolute z-0 top-0 end-0 bg-linear-30 from-accent/30 to-primary-green/30 size-full rounded-lg transition-all duration-150 opacity-0 group-hover:opacity-100"></span>
-			<div
-				className="absolute z-1 transition-all duration-150 border-border group-hover:border-accent-hover
-        rounded-lg border-2 flex flex-col justify-between size-full bg-transparent">
+		<div className="group relative h-70 w-full rounded-lg border border-border bg-background transition-colors duration-150 hover:border-accent-hover">
+			<span className="pointer-events-none absolute inset-0 z-0 rounded-lg bg-linear-30 from-accent/20 to-primary-green/20 opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
+			<div className="relative z-1 flex size-full flex-col justify-between">
 				<Link
 					to={`${card.chat_id}`}
-					className="flex flex-col gap-5 size-full p-3">
-					<p className="font-semibold text-xl text-primary-text truncate">
+					className="flex size-full flex-col gap-5 p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent">
+					<p className="truncate text-xl font-semibold text-primary-text">
 						{card.title}
 					</p>
-					{/* <p className="font-medium text-[15px] text-primary-text/90 line-clamp-6">
-						{card.desc}
-					</p> */}
 				</Link>
 				<div className="flex items-center justify-between p-3">
-					<div className="flex gap-2 items-center">
+					<div className="flex items-center gap-2">
 						<EditDialog id={card.chat_id} />
 						<DeleteDialog id={card.chat_id} />
 					</div>
-					<p dir="ltr" className="font-medium text-[12px] text-text-muted">
+					<p dir="ltr" className="text-xs font-medium text-text-muted">
 						{formatDate(card.created_at)}
 					</p>
 				</div>

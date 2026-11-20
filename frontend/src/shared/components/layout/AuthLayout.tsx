@@ -19,7 +19,7 @@ export default function AuthLayout() {
 				<Title
 					wrapperClassName="rtl:flex-row-reverse"
 					subColor="background"
-					mianColor="accent"
+					mainColor="accent"
 					iconClass="md:size-20"
 				/>
 			</ThemeForce>

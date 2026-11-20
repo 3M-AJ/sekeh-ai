@@ -8,6 +8,7 @@ import { profileAPI } from "@/apps/user/features/profile/service/profileService"
 // Components
 import Dialog from "@/shared/components/ui/Dialog";
 import Button from "@/shared/components/ui/Button";
+import DialogFooterActions from "@/shared/components/ui/DialogFooterActions";
 
 // Hooks
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
@@ -18,50 +19,31 @@ import { removeTokens } from "@/shared/lib/authTokens";
 export default function DeleteAccountDialog() {
 	const { t } = useTranslation("common");
 	const navigate = useNavigate();
-	const { deleteProfile } = profileAPI;
-	const { mutate } = useCustomMutation(deleteProfile, {
+	const { mutate, isPending } = useCustomMutation(profileAPI.deleteProfile, {
 		onSuccess: () => {
 			removeTokens();
 			navigate("/");
 		},
 	});
 
-	function handleDeleteAccount() {
-		mutate();
-	}
-
 	return (
 		<Dialog
 			trigger={
 				<Button variant="destructive">
-					<BanIcon
-						strokeWidth={1.5}
-						className="size-5 transition-colors duration-200"
-					/>
+					<BanIcon strokeWidth={1.5} className="size-5" />
 					<span>{t("profile.deleteTrigger")}</span>
 				</Button>
 			}
 			title={t("profile.deleteTitle")}
 			footer={
-				<button
-					onClick={handleDeleteAccount}
-					className="group py-1 px-3 border-2 border-primary-red text-primary-red rounded-md font-semibold cursor-pointer
-						hover:bg-primary-red hover:text-white transition-all duration-150 flex gap-2 items-center">
-					<span>{t("profile.deleteConfirm")}</span>
-					<HeartCrack
-						strokeWidth={1.5}
-						className="size-5 text-primary-red group-hover:text-white transition-all duration-150"
-					/>
-				</button>
-			}
-			closeButton={
-				<button
-					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
-              hover:bg-primary-action hover:text-white transition-all duration-150">
-					{t("actions.back")}
-				</button>
+				<DialogFooterActions
+					onConfirm={() => mutate()}
+					isPending={isPending}
+					confirmLabel={t("profile.deleteConfirm")}
+					confirmIcon={<HeartCrack strokeWidth={1.5} className="size-5" />}
+				/>
 			}>
-			<p className="text-primary-action">
+			<p className="text-primary-text">
 				{t("profile.deleteBodyBefore")}{" "}
 				<span className="font-semibold">{t("profile.deleteIrreversible")}</span>{" "}
 				{t("profile.deleteBodyMiddle")}{" "}

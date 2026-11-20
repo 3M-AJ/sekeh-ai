@@ -1,6 +1,6 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { LoaderCircle, PenBoxIcon } from "lucide-react";
+import { PenBoxIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 // Types
@@ -11,41 +11,24 @@ import { jobsAPI } from "@/apps/admin/features/jobs/service/jobsService";
 
 // Components
 import Dialog from "@/shared/components/ui/Dialog";
+import DialogIconTrigger from "@/shared/components/ui/DialogIconTrigger";
+import DialogFooterActions from "@/shared/components/ui/DialogFooterActions";
+import Input from "@/shared/components/ui/Input";
 
 // Hooks
+import { useDialogContext } from "@/app/contexts/useDialogContext";
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
+import { cn } from "@/shared/lib/cn";
+import { fieldClassName } from "@/shared/components/ui/Input";
 
 interface EditJobDialogProps {
 	job: AdminJob;
 }
 
-function Field({
-	label,
-	value,
-	onChange,
-}: {
-	label: string;
-	value: string;
-	onChange: (v: string) => void;
-}) {
-	return (
-		<div className="flex flex-col gap-1">
-			<label className="text-[14px] text-primary-action font-semibold">
-				{label}
-			</label>
-			<input
-				value={value}
-				onChange={(e) => onChange(e.target.value)}
-				className="border-2 border-border rounded-md h-9 px-2 outline-0 focus:border-accent transition-all duration-150 text-[14px]"
-			/>
-		</div>
-	);
-}
-
 export default function EditJobDialog({ job }: EditJobDialogProps) {
 	const { t } = useTranslation("common");
 	const queryClient = useQueryClient();
-	const cancelButton = useRef(null);
+	const { closeDialog } = useDialogContext();
 
 	const [form, setForm] = useState({
 		job_title: job.job_title ?? "",
@@ -69,9 +52,7 @@ export default function EditJobDialog({ job }: EditJobDialogProps) {
 
 	const { mutate, isPending } = useCustomMutation(jobsAPI.updateJob, {
 		onSuccess: () => {
-			if (cancelButton.current) {
-				(cancelButton.current as HTMLButtonElement).click();
-			}
+			closeDialog();
 			queryClient.invalidateQueries({ queryKey: ["adminJobs"] });
 		},
 	});
@@ -98,79 +79,65 @@ export default function EditJobDialog({ job }: EditJobDialogProps) {
 		<Dialog
 			variant="fullscreen"
 			trigger={
-				<div
+				<DialogIconTrigger
+					label={t("admin.editJobTitle")}
+					icon={<PenBoxIcon />}
 					onClick={loadFullJob}
-					className="border-2 border-primary-action rounded-full hover:bg-primary-action transition-all duration-100 p-1 size-7 cursor-pointer
-					hover:*:text-white">
-					<PenBoxIcon className="size-full text-primary-action" />
-				</div>
+				/>
 			}
 			title={t("admin.editJobTitle")}
 			footer={
-				<button
-					onClick={handleSubmit}
-					className={`py-1 px-3 border-2 border-accent text-accent rounded-md font-semibold cursor-pointer
-					hover:bg-accent hover:text-white transition-all duration-150 w-20 flex items-center justify-center
-					${isPending ? "pointer-events-none" : ""}`}>
-					{isPending ? (
-						<LoaderCircle className="text-accent animate-spin" />
-					) : (
-						t("actions.save")
-					)}
-				</button>
-			}
-			closeButton={
-				<button
-					ref={cancelButton}
-					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
-					hover:bg-primary-action hover:text-white transition-all duration-150">
-					{t("actions.back")}
-				</button>
+				<DialogFooterActions
+					onConfirm={handleSubmit}
+					isPending={isPending}
+					confirmLabel={t("actions.save")}
+					confirmVariant="default"
+				/>
 			}>
 			<div className="flex flex-col gap-3">
-				<div className="grid grid-cols-2 gap-3">
-					<Field
+				<div className="grid grid-cols-2 gap-3 max-md:grid-cols-1">
+					<Input
 						label={t("admin.fieldTitle")}
 						value={form.job_title}
-						onChange={(v) => setForm({ ...form, job_title: v })}
+						onChange={(e) => setForm({ ...form, job_title: e.target.value })}
 					/>
-					<Field
+					<Input
 						label={t("admin.fieldCompany")}
 						value={form.company_name}
-						onChange={(v) => setForm({ ...form, company_name: v })}
+						onChange={(e) => setForm({ ...form, company_name: e.target.value })}
 					/>
-					<Field
+					<Input
 						label={t("admin.fieldLocation")}
 						value={form.location}
-						onChange={(v) => setForm({ ...form, location: v })}
+						onChange={(e) => setForm({ ...form, location: e.target.value })}
 					/>
-					<Field
+					<Input
 						label={t("admin.fieldPaycheck")}
 						value={form.paycheck}
-						onChange={(v) => setForm({ ...form, paycheck: v })}
+						onChange={(e) => setForm({ ...form, paycheck: e.target.value })}
 					/>
-					<Field
+					<Input
 						label={t("admin.fieldSource")}
 						value={form.source_site}
-						onChange={(v) => setForm({ ...form, source_site: v })}
+						onChange={(e) => setForm({ ...form, source_site: e.target.value })}
 					/>
 				</div>
 
-				<Field
+				<Input
 					label={t("admin.fieldRequirements")}
 					value={form.requirements}
-					onChange={(v) => setForm({ ...form, requirements: v })}
+					onChange={(e) => setForm({ ...form, requirements: e.target.value })}
 				/>
 
 				<div className="flex flex-col gap-2">
-					<label className="text-[14px] text-primary-action font-semibold">
+					<label className="font-semibold text-primary-text">
 						{t("admin.fieldRawText")}
 					</label>
 					<textarea
 						value={form.raw_text}
 						onChange={(e) => setForm({ ...form, raw_text: e.target.value })}
 						rows={6}
-						className="border-2 border-border rounded-md p-2 outline-0 focus:border-accent transition-all duration-150 text-[14px] resize-none"
+						className={cn(fieldClassName, "h-auto resize-none border-border py-2")}
 					/>
 				</div>
 			</div>

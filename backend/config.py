@@ -14,7 +14,14 @@ class Config:
     # =========================
     # Database
     # =========================
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
+    # SQLAlchemy 2.1 maps bare "postgresql://" to psycopg3. This project uses
+    # psycopg2, so normalize the URL when no driver is specified.
+    _database_url = os.getenv("DATABASE_URL") or ""
+    if _database_url.startswith("postgresql://"):
+        _database_url = "postgresql+psycopg2://" + _database_url[len("postgresql://") :]
+    elif _database_url.startswith("postgres://"):
+        _database_url = "postgresql+psycopg2://" + _database_url[len("postgres://") :]
+    SQLALCHEMY_DATABASE_URI = _database_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # The remote PostgreSQL server may close idle connections. Validate a
     # pooled connection before using it and recycle connections periodically.

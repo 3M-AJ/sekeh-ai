@@ -71,6 +71,8 @@
 		"messageFieldName": "پیام"
 	},
 	"profile": {
+		"pageTitle": "پروفایل",
+		"pageDescription": "مشاهده و مدیریت اطلاعات حساب کاربری.",
 		"emailLabel": "آدرس ایمیل :",
 		"phoneLabel": "شماره تلفن :",
 		"joinedAt": "تاریخ عضویت : {{date}}",

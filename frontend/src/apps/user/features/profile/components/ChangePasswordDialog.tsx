@@ -83,87 +83,87 @@ export default function ChangePasswordDialog() {
 	};
 
 	return (
-		<>
-			<Dialog
-				trigger={
-					<Button aria-haspopup="dialog" aria-expanded={dialog.isOpen}>
-						<KeyRound className="size-5" strokeWidth={1.5} />
-						<span className="pb-1">{t("profile.changePasswordTrigger")}</span>
+		<Dialog
+			trigger={
+				<Button aria-haspopup="dialog" aria-expanded={dialog.isOpen}>
+					<KeyRound className="size-5" strokeWidth={1.5} />
+					<span className="pb-1">{t("profile.changePasswordTrigger")}</span>
+				</Button>
+			}
+			variant="fullscreen"
+			title={t("profile.changePasswordTitle")}
+			footer={
+				<>
+					<Button
+						variant="outline"
+						onClick={() => {
+							dialog.closeDialog();
+							setTouched({});
+						}}
+						disabled={isPending}
+						className="rounded-md">
+						{t("actions.back")}
 					</Button>
-				}
-				variant="fullscreen"
-				title={t("profile.changePasswordTitle")}
-				footer={
-					<>
-						<Button
-							variant="outline"
-							onClick={() => {
-								dialog.closeDialog();
-								setTouched({});
-							}}
-							disabled={isPending}>
-							{t("actions.back")}
-						</Button>
-						<Button
-							type="submit"
-							form="change-password-form"
-							disabled={!isFormValid || isPending}>
-							{isPending ? (
-								<>
-									<LoaderCircle className="size-4 animate-spin" />
-									<span>{t("profile.submitting")}</span>
-								</>
-							) : (
-								t("actions.submit")
-							)}
-						</Button>
-					</>
-				}>
-				<form
-					id="change-password-form"
-					noValidate
-					onSubmit={(event) => {
-						event.preventDefault();
-						handleSubmit();
-					}}
-					className="flex min-w-0 flex-col gap-5 md:min-w-96">
-					<PasswordInput
-						label={t("profile.currentPasswordLabel")}
-						value={form.current}
-						onChange={(event) => handleChange("current", event.target.value)}
-						onBlur={() => markTouched("current")}
-						autoComplete="current-password"
-						maxLength={64}
-						required
-						error={touched.current ? validationErrors.current : undefined}
-					/>
+					<Button
+						type="submit"
+						form="change-password-form"
+						disabled={!isFormValid || isPending}
+						className="rounded-md">
+						{isPending ? (
+							<>
+								<LoaderCircle className="size-4 animate-spin" />
+								<span>{t("profile.submitting")}</span>
+							</>
+						) : (
+							t("actions.submit")
+						)}
+					</Button>
+				</>
+			}>
+			<form
+				id="change-password-form"
+				noValidate
+				onSubmit={(event) => {
+					event.preventDefault();
+					handleSubmit();
+				}}
+				className="flex min-w-0 flex-col gap-5 md:min-w-96">
+				<PasswordInput
+					label={t("profile.currentPasswordLabel")}
+					value={form.current}
+					onChange={(event) => handleChange("current", event.target.value)}
+					onBlur={() => markTouched("current")}
+					autoComplete="current-password"
+					maxLength={64}
+					required
+					error={touched.current ? validationErrors.current : undefined}
+				/>
 
-					<div className="space-y-2">
-						<PasswordInput
-							label={t("profile.newPasswordLabel")}
-							value={form.new}
-							onChange={(event) => handleChange("new", event.target.value)}
-							onBlur={() => markTouched("new")}
-							autoComplete="new-password"
-							maxLength={64}
-							required
-							error={touched.new ? validationErrors.new : undefined}
-						/>
-						<PasswordRequirements value={form.new} />
-					</div>
-
+				<div className="space-y-2">
 					<PasswordInput
-						label={t("profile.confirmNewPasswordLabel")}
-						value={form.confirm}
-						onChange={(event) => handleChange("confirm", event.target.value)}
-						onBlur={() => markTouched("confirm")}
+						label={t("profile.newPasswordLabel")}
+						value={form.new}
+						onChange={(event) => handleChange("new", event.target.value)}
+						onBlur={() => markTouched("new")}
 						autoComplete="new-password"
 						maxLength={64}
 						required
-						error={touched.confirm ? validationErrors.confirm : undefined}
+						error={touched.new ? validationErrors.new : undefined}
 					/>
-				</form>
-			</Dialog>
-		</>
+					<PasswordRequirements value={form.new} />
+				</div>
+
+				<PasswordInput
+					label={t("profile.confirmNewPasswordLabel")}
+					value={form.confirm}
+					onChange={(event) => handleChange("confirm", event.target.value)}
+					onBlur={() => markTouched("confirm")}
+					autoComplete="new-password"
+					maxLength={64}
+					required
+					error={touched.confirm ? validationErrors.confirm : undefined}
+				/>
+			</form>
+		</Dialog>
 	);
 }

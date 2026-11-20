@@ -11,8 +11,11 @@ import { profileAPI } from "@/apps/user/features/profile/service/profileService"
 // Components
 import Dialog from "@/shared/components/ui/Dialog";
 import Button from "@/shared/components/ui/Button";
+import Input from "@/shared/components/ui/Input";
+import DialogFooterActions from "@/shared/components/ui/DialogFooterActions";
 
 // Hooks
+import { useDialogContext } from "@/app/contexts/useDialogContext";
 import { useCustomMutation } from "@/shared/hooks/useCustomMutation";
 import useProfile from "@/apps/user/features/profile/store/profileStore";
 
@@ -39,6 +42,7 @@ export default function EditProfileDialog({
 }) {
 	const { t } = useTranslation("common");
 	const { profile } = useProfile();
+	const { closeDialog } = useDialogContext();
 
 	const [form, setForm] = useState<UserForm>({
 		email: "",
@@ -49,26 +53,28 @@ export default function EditProfileDialog({
 		profile?.phone_number ? String(profile.phone_number) : "",
 	);
 	const [errors, setErrors] = useState<ProfileErrors>({});
-	const { updateProfile } = profileAPI;
-	const { mutate } = useCustomMutation(updateProfile, {
+	const { mutate, isPending } = useCustomMutation(profileAPI.updateProfile, {
 		onSuccess: () => {
 			toast.success(t("toasts:profile.success.updated"));
 			refetch();
+			closeDialog();
 		},
 	});
 
 	useEffect(() => {
-		(() => {
-			if (profile)
-				setForm({
-					email: profile.email ?? "",
-					phone_number: profile.phone_number ?? "",
-					username: profile.username ?? "",
-				});
-		})();
+		if (profile) {
+			setForm({
+				email: profile.email ?? "",
+				phone_number: profile.phone_number ?? "",
+				username: profile.username ?? "",
+			});
+			setPhoneInput(
+				profile.phone_number ? String(profile.phone_number) : "",
+			);
+		}
 	}, [profile]);
 
-	const hableChange = <K extends keyof UserForm>(
+	const handleChange = <K extends keyof UserForm>(
 		key: K,
 		value: UserForm[K],
 	) => {
@@ -93,7 +99,8 @@ export default function EditProfileDialog({
 				form.username,
 				t("profile.usernameLabel"),
 			);
-		if (getEmailError(email)) nextErrors.email = getEmailError(email);
+		const emailError = getEmailError(email);
+		if (emailError) nextErrors.email = emailError;
 		if (phoneValue) {
 			const phoneError = getPhoneError(phoneValue);
 			if (phoneError) nextErrors.phone_number = phoneError;
@@ -102,14 +109,12 @@ export default function EditProfileDialog({
 		setErrors(nextErrors);
 		if (Object.keys(nextErrors).length > 0) return;
 
-		const payload = {
+		mutate({
 			...form,
 			username,
 			email,
 			phone_number: parsedPhone,
-		};
-
-		mutate(payload);
+		});
 	};
 
 	return (
@@ -123,69 +128,41 @@ export default function EditProfileDialog({
 			}
 			title={t("profile.editTitle")}
 			footer={
-				<button
-					type="submit"
-					onClick={handleUpdate}
-					className="py-1 px-3 border-2 border-accent text-accent rounded-md font-semibold cursor-pointer
-                hover:bg-accent hover:text-white transition-all duration-150">
-					{t("actions.submit")}
-				</button>
-			}
-			closeButton={
-				<button
-					type="button"
-					className="py-1 px-3 border-2 border-primary-action text-primary-action rounded-md font-semibold cursor-pointer
-                hover:bg-primary-action hover:text-white transition-all duration-150">
-					{t("actions.back")}
-				</button>
+				<DialogFooterActions
+					onConfirm={handleUpdate}
+					isPending={isPending}
+					confirmLabel={t("actions.submit")}
+					confirmVariant="default"
+				/>
 			}>
 			<form
-				onSubmit={(e) => e.preventDefault()}
-				className="flex flex-col items-center gap-10">
-				<section className="grid grid-cols-2 w-full gap-5">
-					<div className="flex flex-col gap-2">
-						<label className="text-[16px] text-primary-action">
-							{t("profile.usernameLabel")}
-						</label>
-						<input
-							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.username ? "border-red-500" : "border-border"}`}
-							placeholder=""
-							value={form.username}
-							onChange={(e) => hableChange("username", e.target.value)}
-						/>
-						{errors.username ? (
-							<p className="text-sm text-red-500">{errors.username}</p>
-						) : null}
-					</div>
-					<div className="flex flex-col gap-2">
-						<label className="text-[16px] text-primary-action">
-							{t("profile.phoneFieldLabel")}
-						</label>
-						<input
-							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.phone_number ? "border-red-500" : "border-border"}`}
-							placeholder={t("profile.phonePlaceholder")}
-							value={phoneInput}
-							onChange={(e) => handlePhoneChange(e.target.value)}
-						/>
-						{errors.phone_number ? (
-							<p className="text-sm text-red-500">{errors.phone_number}</p>
-						) : null}
-					</div>
-					<div className="flex flex-col gap-2 col-span-2">
-						<label className="text-[16px] text-primary-action">
-							{t("profile.emailFieldLabel")}
-						</label>
-						<input
-							className={`border-2 rounded-md py-2 px-2 outline-0 ${errors.email ? "border-red-500" : "border-border"}`}
-							placeholder={t("profile.emailPlaceholder")}
-							value={form.email ?? ""}
-							onChange={(e) => hableChange("email", e.target.value)}
-						/>
-						{errors.email ? (
-							<p className="text-sm text-red-500">{errors.email}</p>
-						) : null}
-					</div>
-				</section>
+				onSubmit={(e) => {
+					e.preventDefault();
+					handleUpdate();
+				}}
+				className="grid w-full grid-cols-2 gap-5 max-md:grid-cols-1">
+				<Input
+					label={t("profile.usernameLabel")}
+					value={form.username}
+					onChange={(e) => handleChange("username", e.target.value)}
+					error={errors.username}
+				/>
+				<Input
+					label={t("profile.phoneFieldLabel")}
+					placeholder={t("profile.phonePlaceholder")}
+					value={phoneInput}
+					onChange={(e) => handlePhoneChange(e.target.value)}
+					error={errors.phone_number}
+				/>
+				<div className="col-span-2 max-md:col-span-1">
+					<Input
+						label={t("profile.emailFieldLabel")}
+						placeholder={t("profile.emailPlaceholder")}
+						value={form.email ?? ""}
+						onChange={(e) => handleChange("email", e.target.value)}
+						error={errors.email}
+					/>
+				</div>
 			</form>
 		</Dialog>
 	);

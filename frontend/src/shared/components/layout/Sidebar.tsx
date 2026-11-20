@@ -2,10 +2,19 @@ import { NavLink, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 import type { NavItem } from "./types";
 import type { ReactNode } from "react";
+import { cn } from "@/shared/lib/cn";
 
 interface SidebarProps {
 	items: NavItem[];
 	footer?: ReactNode;
+}
+
+function isActivePath(pathname: string, path: string, href: string) {
+	if (pathname === href || pathname === `/${path}`) return true;
+	if (path === "chats") {
+		return pathname === "/chats" || pathname.startsWith("/chats/");
+	}
+	return pathname === href || pathname.startsWith(`${href}/`);
 }
 
 export default function Sidebar({ items, footer }: SidebarProps) {
@@ -13,27 +22,33 @@ export default function Sidebar({ items, footer }: SidebarProps) {
 	const { t } = useTranslation("common");
 
 	return (
-		<nav className="flex flex-col items-start gap-5 w-full h-full bg-background p-2">
+		<nav className="flex h-full w-full flex-col items-start gap-5 bg-background p-2">
 			{items.map(({ icon: Icon, path, labelKey, to }) => {
 				const href = to ?? `/${path}`;
-				const isThisPage = location.pathname.includes(path);
+				const isThisPage = isActivePath(location.pathname, path, href);
+
 				return (
 					<NavLink
 						to={href}
-						className={`cursor-pointer ${
-							isThisPage ? "bg-accent" : "hover:bg-accent-soft"
-						} px-3 md:py-1 max-md:py-2 rounded-lg transition-all duration-150 flex gap-7 items-center w-full`}
+						aria-current={isThisPage ? "page" : undefined}
+						className={cn(
+							"flex w-full cursor-pointer items-center gap-7 rounded-lg px-3 transition-colors duration-150 max-md:py-2 md:py-1",
+							"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent",
+							isThisPage ? "bg-accent" : "hover:bg-accent-soft",
+						)}
 						key={`${path}-icon`}
 						id={`${path}-icon`}>
 						<Icon
-							className={`md:size-5 max-md:size-6 ${
-								isThisPage ? "text-on-accent" : "text-primary-action"
-							}`}
+							className={cn(
+								"max-md:size-6 md:size-5",
+								isThisPage ? "text-on-accent" : "text-primary-action",
+							)}
 						/>
 						<span
-							className={`font-semibold ${
-								isThisPage ? "text-on-accent" : "text-primary-text"
-							}`}>
+							className={cn(
+								"font-semibold",
+								isThisPage ? "text-on-accent" : "text-primary-text",
+							)}>
 							{t(labelKey)}
 						</span>
 					</NavLink>

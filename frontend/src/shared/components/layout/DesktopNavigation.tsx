@@ -16,7 +16,7 @@ export default function DesktopNavigation({
 	footer,
 }: DesktopNavigationProps) {
 	return (
-		<div className="pt-17 pb-8 w-45 flex flex-col justify-between h-full bg-background shrink-0 max-md:hidden">
+		<div className="flex h-full w-45 shrink-0 flex-col justify-between bg-background pt-(--navbar-height) pb-8 max-md:hidden">
 			<Sidebar items={items} footer={footer} />
 		</div>
 	);

@@ -71,6 +71,8 @@
 		"messageFieldName": "Message"
 	},
 	"profile": {
+		"pageTitle": "Profile",
+		"pageDescription": "View and manage your account details.",
 		"emailLabel": "Email address:",
 		"phoneLabel": "Phone number:",
 		"joinedAt": "Joined: {{date}}",

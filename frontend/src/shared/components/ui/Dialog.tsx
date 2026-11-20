@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useId, useMemo, type ReactNode } from "react";
+import {
+	cloneElement,
+	isValidElement,
+	useCallback,
+	useEffect,
+	useId,
+	useMemo,
+	type ReactElement,
+	type ReactNode,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 
@@ -25,6 +34,14 @@ export interface DialogProps {
 	variant?: "bottom" | "fullscreen";
 }
 
+function composeHandlers(
+	...handlers: Array<((event: React.MouseEvent) => void) | undefined>
+) {
+	return (event: React.MouseEvent) => {
+		handlers.forEach((handler) => handler?.(event));
+	};
+}
+
 export default function Dialog({
 	trigger,
 	title,
@@ -38,40 +55,51 @@ export default function Dialog({
 	onOpenChange,
 	variant = "bottom",
 }: DialogProps) {
+	const dialogId = useId();
 	const titleId = useId();
 	const { t } = useTranslation("common");
+	const {
+		isOpen,
+		activeId,
+		setContent,
+		openDialog,
+		closeDialog,
+		setOnClose,
+	} = useDialogContext();
 
-	const { isOpen, DialogContent, setContent, openDialog, closeDialog } =
-		useDialogContext();
+	const isOwner = isOpen && activeId === dialogId;
 
-	const sharedStyles = "fixed z-6 border-2 border-border bg-background";
-	const desktop =
-		"md:top-1/2 md:end-1/2 md:-translate-1/2 md:min-w-1/3 md:w-fit md:max-w-3/5 md:rounded-lg";
-	const mobileFullscreen =
-		"max-md:inset-0 max-md:rounded-none max-md:inset-x-0";
-	const mobileWindow =
-		"max-md:top-auto max-md:bottom-0 max-md:rounded-b-0 max-md:inset-x-0";
+	const registerCloseHandlers = useCallback(() => {
+		setOnClose(() => {
+			onOpenChange?.(false);
+			onClose?.();
+		});
+	}, [setOnClose, onOpenChange, onClose]);
+
+	const handleClose = useCallback(() => {
+		closeDialog();
+	}, [closeDialog]);
 
 	const dialogContent = useMemo(
 		() => (
 			<div
-				id="dialog-content"
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby={titleId}
 				className={cn(
-					sharedStyles,
-					desktop,
-					variant === "fullscreen" ? mobileFullscreen : mobileWindow,
+					"fixed z-[60] flex max-h-[min(100dvh,920px)] w-full flex-col border-2 border-border bg-background shadow-lg",
+					"md:top-1/2 md:left-1/2 md:w-fit md:min-w-[min(100%,24rem)] md:max-w-[min(90vw,40rem)] md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-xl",
+					variant === "fullscreen"
+						? "max-md:inset-0 max-md:rounded-none"
+						: "max-md:inset-x-0 max-md:bottom-0 max-md:max-h-[min(92dvh,920px)] max-md:rounded-t-xl max-md:pb-[env(safe-area-inset-bottom)]",
 				)}>
-				<header className="flex items-center justify-between border-b border-border p-5">
-					<h2 id={titleId} className="text-lg font-semibold">
+				<header className="flex shrink-0 items-center justify-between gap-3 border-b border-border p-5">
+					<h2 id={titleId} className="text-lg font-semibold text-primary-text">
 						{title}
 					</h2>
-
 					<Button
 						type="button"
-						onClick={closeDialog}
+						onClick={handleClose}
 						variant="ghost"
 						size="icon"
 						aria-label={t("dialog.closeAria")}>
@@ -79,61 +107,90 @@ export default function Dialog({
 					</Button>
 				</header>
 
-				<main className="h-full overflow-y-auto p-5 scrollbar-white">
+				<div className="min-h-0 flex-1 overflow-y-auto p-5 scrollbar-gray">
 					{children}
-				</main>
+				</div>
 
 				{(footer || closeButton) && (
-					<footer className="flex justify-end gap-3 border-t border-border p-5">
+					<footer className="flex shrink-0 flex-wrap items-center justify-end gap-3 border-t border-border p-5">
+						{closeButton}
 						{footer}
-
-						{closeButton && <div onClick={closeDialog}>{closeButton}</div>}
 					</footer>
 				)}
 			</div>
 		),
-		[children, closeButton, closeDialog, footer, t, title, titleId, variant],
+		[children, closeButton, footer, handleClose, t, title, titleId, variant],
 	);
 
 	const handleOpen = useCallback(() => {
+		registerCloseHandlers();
 		setContent(dialogContent);
-		openDialog();
-
+		openDialog(dialogId);
 		onOpenChange?.(true);
 		onOpen?.();
-	}, [dialogContent, setContent, openDialog, onOpenChange, onOpen]);
+	}, [
+		dialogContent,
+		dialogId,
+		setContent,
+		openDialog,
+		onOpenChange,
+		onOpen,
+		registerCloseHandlers,
+	]);
 
-	const handleClose = useCallback(() => {
-		closeDialog();
-
-		onOpenChange?.(false);
-		onClose?.();
-	}, [closeDialog, onOpenChange, onClose]);
+	useEffect(() => {
+		if (!isOwner) return;
+		registerCloseHandlers();
+		setContent(dialogContent);
+	}, [dialogContent, isOwner, setContent, registerCloseHandlers]);
 
 	useEffect(() => {
 		if (open === undefined) return;
 
-		if (open && (!isOpen || !DialogContent)) {
-			// open isn't think or content isn't set properly
+		if (open && !isOwner) {
 			handleOpen();
 		}
 
-		if (!open && isOpen) {
+		if (!open && isOwner) {
 			handleClose();
 		}
-	}, [open, isOpen, DialogContent, handleOpen, handleClose]);
+	}, [open, isOwner, handleOpen, handleClose]);
 
 	if (!trigger) {
 		return null;
 	}
 
+	if (isValidElement(trigger)) {
+		const element = trigger as ReactElement<{
+			onClick?: (event: React.MouseEvent) => void;
+			className?: string;
+			"aria-haspopup"?: string;
+			"aria-expanded"?: boolean;
+		}>;
+		const tag = typeof element.type === "string" ? element.type : null;
+		const shouldWrap = Boolean(tag && tag !== "button");
+
+		if (!shouldWrap) {
+			return cloneElement(element, {
+				onClick: composeHandlers(element.props.onClick, handleOpen),
+				"aria-haspopup": "dialog",
+				"aria-expanded": isOwner,
+				className: cn(element.props.className, triggerClass),
+			});
+		}
+	}
+
 	return (
-		<span
+		<button
+			type="button"
 			onClick={handleOpen}
 			aria-haspopup="dialog"
-			aria-expanded={isOpen}
-			className={cn("cursor-pointer focus-visible:outline-none", triggerClass)}>
+			aria-expanded={isOwner}
+			className={cn(
+				"inline-flex cursor-pointer appearance-none border-0 bg-transparent p-0 text-start",
+				triggerClass,
+			)}>
 			{trigger}
-		</span>
+		</button>
 	);
 }

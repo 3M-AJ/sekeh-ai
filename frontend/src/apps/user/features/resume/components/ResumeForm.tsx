@@ -7,6 +7,9 @@ import type { ResumeFormObject } from "@/apps/user/features/resume/types";
 
 // Components
 import Dialog from "@/shared/components/ui/Dialog";
+import Button from "@/shared/components/ui/Button";
+import Input, { fieldClassName } from "@/shared/components/ui/Input";
+import { cn } from "@/shared/lib/cn";
 
 interface Props {
 	open: boolean;
@@ -45,50 +48,43 @@ export default function ResumeForm({
 			onClose={onClose}
 			variant="fullscreen"
 			title={editingId ? t("resume.editTitle") : t("resume.createTitle")}
-			closeButton={
-				<button
-					type="button"
-					className="py-1 px-3 border-2 border-border text-text-muted rounded-md">
-					{t("actions.back")}
-				</button>
-			}
 			footer={
-				<button
-					form="resume-form"
-					type="submit"
-					className={`py-1 px-3 rounded-md font-semibold bg-primary-action text-white flex items-center gap-2 ${
-						isPending || !validate ? "opacity-40 pointer-events-none" : ""
-					}`}>
-					{isPending ? (
-						<LoaderCircle className="size-4 animate-spin" />
-					) : (
-						<SendHorizonal className="size-4" />
-					)}
-					<span>
-						{editingId ? t("resume.submitEdit") : t("resume.submitCreate")}
-					</span>
-				</button>
+				<>
+					<Button
+						type="button"
+						variant="outline"
+						onClick={onClose}
+						className="rounded-md">
+						{t("actions.back")}
+					</Button>
+					<Button
+						form="resume-form"
+						type="submit"
+						disabled={isPending || !validate}
+						className="rounded-md">
+						{isPending ? (
+							<LoaderCircle className="size-4 animate-spin" />
+						) : (
+							<SendHorizonal className="size-4" />
+						)}
+						<span>
+							{editingId ? t("resume.submitEdit") : t("resume.submitCreate")}
+						</span>
+					</Button>
+				</>
 			}>
 			<form
 				id="resume-form"
 				onSubmit={onSubmit}
 				className="flex flex-col gap-6">
-				<div className="flex flex-col gap-2">
-					<label className="font-semibold text-primary-text">
-						{t("resume.titleLabel")}
-					</label>
-					<input
-						value={formData.title}
-						onChange={(e) => onChange("title", e.target.value)}
-						maxLength={80}
-						placeholder={t("resume.titlePlaceholder")}
-						aria-invalid={Boolean(errors?.title)}
-						className={`px-2 border-2 rounded-md h-10 placeholder:text-text-muted text-[16px] outline-0 focus:border-accent transition-all duration-150 ${errors?.title ? "border-red-500" : "border-border"}`}
-					/>
-					{errors?.title ? (
-						<p className="text-sm text-red-500">{errors.title}</p>
-					) : null}
-				</div>
+				<Input
+					label={t("resume.titleLabel")}
+					value={formData.title}
+					onChange={(e) => onChange("title", e.target.value)}
+					maxLength={80}
+					placeholder={t("resume.titlePlaceholder")}
+					error={errors?.title}
+				/>
 
 				<div className="flex flex-col gap-2">
 					<label className="font-semibold text-primary-text">
@@ -101,10 +97,14 @@ export default function ResumeForm({
 						maxLength={4000}
 						placeholder={t("resume.contentPlaceholder")}
 						aria-invalid={Boolean(errors?.content)}
-						className={`px-2 py-2 border-2 rounded-md placeholder:text-text-muted text-[16px] outline-0 focus:border-accent transition-all duration-150 resize-y ${errors?.content ? "border-red-500" : "border-border"}`}
+						className={cn(
+							fieldClassName,
+							"h-auto resize-y py-2",
+							errors?.content ? "border-primary-red" : "border-border",
+						)}
 					/>
 					{errors?.content ? (
-						<p className="text-sm text-red-500">{errors.content}</p>
+						<p className="text-sm text-primary-red">{errors.content}</p>
 					) : null}
 				</div>
 			</form>

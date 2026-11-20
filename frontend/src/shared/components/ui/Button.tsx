@@ -11,9 +11,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
 	default:
-		"border-transparent bg-primary-action text-background hover:opacity-90",
-	outline: "border-border bg-background text-primary-text hover:bg-surface",
-	destructive: "border-transparent bg-primary-red text-white hover:opacity-90",
+		"border-transparent bg-primary-action text-on-accent hover:bg-primary-text",
+	outline:
+		"border-border bg-background text-primary-text hover:bg-surface",
+	destructive:
+		"border-transparent bg-primary-red text-on-accent hover:brightness-110",
 	ghost:
 		"border-transparent bg-transparent text-text-muted hover:bg-surface hover:text-primary-text",
 };
@@ -35,7 +37,7 @@ export default function Button({
 		<button
 			type={type}
 			className={cn(
-				"inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 text-sm font-semibold transition-[background-color_color_opacity] duration-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50",
+				"inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border-2 text-sm font-semibold transition-[background-color,color,filter,opacity] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:pointer-events-none disabled:opacity-50",
 				variantClasses[variant],
 				sizeClasses[size],
 				className,

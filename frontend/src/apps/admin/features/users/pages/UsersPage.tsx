@@ -4,7 +4,10 @@ import { useTranslation } from "react-i18next";
 // Components
 import DeleteUserDialog from "@/apps/admin/features/users/components/DeleteUserDialog";
 import PageTitle from "@/shared/components/layout/PageTitle";
+import Section from "@/shared/components/layout/Section";
+import AdminTable from "@/shared/components/layout/AdminTable";
 import Pagination from "@/shared/components/ui/Pagination";
+import Input from "@/shared/components/ui/Input";
 
 // Hooks
 import { useUsersPage } from "@/apps/admin/features/users/hooks/useUsersPage";
@@ -22,102 +25,91 @@ export default function AdminUsersPage() {
 	} = useUsersPage();
 
 	return (
-		<div className="p-7 max-md:p-4 w-full h-full grid-cols-2 flex flex-col gap-5">
-			<header className="flex flex-col gap-4">
+		<Section
+			className="overflow-hidden"
+			title={
 				<PageTitle
 					icon={Users}
 					title={t("admin.usersTitle")}
 					desc={t("admin.usersDescription")}
 				/>
-				<div className="flex items-center justify-between gap-3 max-md:flex-col max-md:items-stretch">
-					<input
-						value={search}
-						onChange={(e) => handleSearchChange(e.target.value)}
-						placeholder={t("admin.usersSearchPlaceholder")}
-						className="border-2 border-border rounded-md h-10 px-3 w-72 max-md:w-full outline-0
-						focus:border-accent transition-all duration-150 text-[15px]"
-					/>
-				</div>
-			</header>
-
-			<div className="rounded-lg border-2 border-border overflow-auto h-full scrollbar-gray">
-				<table className="w-full text-[14px]">
-					<thead className="bg-surface text-primary-action">
+			}
+			header={
+				<Input
+					value={search}
+					onChange={(e) => handleSearchChange(e.target.value)}
+					placeholder={t("admin.usersSearchPlaceholder")}
+					className="w-72 max-md:w-full"
+					aria-label={t("admin.usersSearchPlaceholder")}
+				/>
+			}>
+			<AdminTable
+				isPending={isPending}
+				headers={
+					<>
+						<th className="p-3 text-end font-semibold">
+							{t("admin.columnUsername")}
+						</th>
+						<th className="p-3 text-end font-semibold max-md:hidden">
+							{t("admin.columnEmail")}
+						</th>
+						<th className="p-3 text-end font-semibold max-md:hidden">
+							{t("admin.columnPhone")}
+						</th>
+						<th className="p-3 text-end font-semibold">
+							{t("admin.columnRole")}
+						</th>
+						<th className="p-3 text-end font-semibold max-md:hidden">
+							{t("admin.columnCreatedAt")}
+						</th>
+						<th className="p-3 text-end font-semibold" />
+					</>
+				}
+				empty={
+					!isPending && users.length === 0 ? (
 						<tr>
-							<th className="text-end p-3 font-semibold">
-								{t("admin.columnUsername")}
-							</th>
-							<th className="text-end p-3 font-semibold max-md:hidden">
-								{t("admin.columnEmail")}
-							</th>
-							<th className="text-end p-3 font-semibold max-md:hidden">
-								{t("admin.columnPhone")}
-							</th>
-							<th className="text-end p-3 font-semibold">
-								{t("admin.columnRole")}
-							</th>
-							<th className="text-end p-3 font-semibold max-md:hidden">
-								{t("admin.columnCreatedAt")}
-							</th>
-							<th className="text-end p-3 font-semibold"></th>
+							<td colSpan={6} className="p-6 text-center text-text-muted">
+								{t("admin.usersEmpty")}
+							</td>
 						</tr>
-					</thead>
-					<tbody>
-						{isPending
-							? Array(6)
-									.fill("")
-									.map((_, i) => (
-										<tr key={i} className="border-t border-border">
-											<td colSpan={6} className="p-3">
-												<div className="h-5 w-full bg-border/70 rounded animate-pulse"></div>
-											</td>
-										</tr>
-									))
-							: users.map((u) => (
-									<tr
-										key={u.user_id}
-										className="border-t border-border hover:bg-surface/50 transition-all duration-150">
-										<td className="p-3 text-primary-text font-medium">
-											{u.username}
-										</td>
-										<td className="p-3 text-text-muted max-md:hidden">
-											{u.email ?? t("jobs.emptyValue")}
-										</td>
-										<td className="p-3 text-text-muted max-md:hidden">
-											{u.phone_number ?? t("jobs.emptyValue")}
-										</td>
-										<td className="p-3">
-											<span
-												className={`px-2 py-0.5 rounded-full text-[12px] font-semibold
-												${u.role === "admin" ? "bg-accent-soft text-accent" : "bg-surface text-text-muted"}`}>
-												{u.role === "admin"
-													? t("admin.roleAdmin")
-													: t("admin.roleUser")}
-											</span>
-										</td>
-										<td className="p-3 text-text-muted max-md:hidden">
-											{new Date(u.created_at).toLocaleDateString()}
-										</td>
-										<td className="p-3">
-											<DeleteUserDialog
-												id={u.user_id}
-												username={u.username}
-												onDeleted={handleDeleted}
-											/>
-										</td>
-									</tr>
-								))}
-
-						{!isPending && users.length === 0 && (
-							<tr>
-								<td colSpan={6} className="p-6 text-center text-text-muted">
-									{t("admin.usersEmpty")}
-								</td>
-							</tr>
-						)}
-					</tbody>
-				</table>
-			</div>
+					) : null
+				}>
+				{users.map((u) => (
+					<tr
+						key={u.user_id}
+						className="border-t border-border transition-colors duration-150 hover:bg-surface/50">
+						<td className="p-3 font-medium text-primary-text">{u.username}</td>
+						<td className="p-3 text-text-muted max-md:hidden">
+							{u.email ?? t("jobs.emptyValue")}
+						</td>
+						<td className="p-3 text-text-muted max-md:hidden">
+							{u.phone_number ?? t("jobs.emptyValue")}
+						</td>
+						<td className="p-3">
+							<span
+								className={
+									u.role === "admin"
+										? "rounded-full bg-accent-soft px-2 py-0.5 text-xs font-semibold text-accent"
+										: "rounded-full bg-surface px-2 py-0.5 text-xs font-semibold text-text-muted"
+								}>
+								{u.role === "admin"
+									? t("admin.roleAdmin")
+									: t("admin.roleUser")}
+							</span>
+						</td>
+						<td className="p-3 text-text-muted max-md:hidden">
+							{new Date(u.created_at).toLocaleDateString()}
+						</td>
+						<td className="p-3">
+							<DeleteUserDialog
+								id={u.user_id}
+								username={u.username}
+								onDeleted={handleDeleted}
+							/>
+						</td>
+					</tr>
+				))}
+			</AdminTable>
 
 			{data?.data && (
 				<Pagination
@@ -126,6 +118,6 @@ export default function AdminUsersPage() {
 					onChange={setPage}
 				/>
 			)}
-		</div>
+		</Section>
 	);
 }
