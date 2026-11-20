@@ -11,7 +11,7 @@ import {
 import Dialog from "@/shared/components/ui/Dialog";
 import Button from "@/shared/components/ui/Button";
 import EmptyState from "@/shared/components/feedback/EmptyState";
-import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
+import { ResumeListSkeleton } from "@/shared/components/feedback/Skeleton";
 
 // Hooks
 import { useDialogContext } from "@/app/contexts/useDialogContext";
@@ -52,9 +52,9 @@ export default function ResumePickerDialog({
 			title={t("resume.pickerTitle")}>
 			<div className="flex min-w-[280px] flex-col gap-3">
 				{isLoading ? (
-					<LoadingBlock />
+					<ResumeListSkeleton count={3} compact />
 				) : resumes.length === 0 ? (
-					<EmptyState message={t("resume.empty")} dashed />
+					<EmptyState message={t("resume.empty")} icon={FileText} />
 				) : (
 					<div className="flex flex-col gap-3">
 						{resumes.map((resume) => (

@@ -9,7 +9,7 @@ import Section from "@/shared/components/layout/Section";
 import GrowableButton from "@/shared/components/ui/GrowableButton";
 import Button from "@/shared/components/ui/Button";
 import EmptyState from "@/shared/components/feedback/EmptyState";
-import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
+import { ResumeListSkeleton } from "@/shared/components/feedback/Skeleton";
 
 // Hooks
 import { useResumePage } from "@/apps/user/features/resume/hooks/useResumePage";
@@ -56,28 +56,22 @@ export default function ResumePage() {
 					/>
 				}>
 				{isLoading ? (
-					<LoadingBlock
-						variant="pulse"
-						count={3}
-						pulseClassName="h-30"
-					/>
+					<ResumeListSkeleton />
 				) : resumes.length === 0 ? (
-					<EmptyState message={t("resume.empty")} icon={FileText} dashed />
+					<EmptyState message={t("resume.empty")} icon={FileText} />
 				) : (
 					<div className="flex flex-col gap-3">
 						{resumes.map((resume) => (
 							<div
 								key={resume.id}
 								className="flex flex-col gap-3 rounded-lg border border-border bg-background p-4">
-								<div className="flex items-start justify-between gap-3">
-									<div>
-										<p className="font-semibold text-primary-text">
-											{resume.title}
-										</p>
-										<p className="mt-1 line-clamp-3 text-sm text-text-muted">
-											{resume.content}
-										</p>
-									</div>
+								<div>
+									<p className="font-semibold text-primary-text">
+										{resume.title}
+									</p>
+									<p className="mt-1 line-clamp-3 text-sm text-text-muted">
+										{resume.content}
+									</p>
 								</div>
 
 								<div className="flex flex-wrap gap-2">

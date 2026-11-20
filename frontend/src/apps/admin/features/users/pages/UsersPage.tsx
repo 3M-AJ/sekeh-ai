@@ -8,6 +8,7 @@ import Section from "@/shared/components/layout/Section";
 import AdminTable from "@/shared/components/layout/AdminTable";
 import Pagination from "@/shared/components/ui/Pagination";
 import Input from "@/shared/components/ui/Input";
+import EmptyState from "@/shared/components/feedback/EmptyState";
 
 // Hooks
 import { useUsersPage } from "@/apps/admin/features/users/hooks/useUsersPage";
@@ -45,6 +46,7 @@ export default function AdminUsersPage() {
 			}>
 			<AdminTable
 				isPending={isPending}
+				hideOnMobile={[1, 2, 4]}
 				headers={
 					<>
 						<th className="p-3 text-end font-semibold">
@@ -68,8 +70,12 @@ export default function AdminUsersPage() {
 				empty={
 					!isPending && users.length === 0 ? (
 						<tr>
-							<td colSpan={6} className="p-6 text-center text-text-muted">
-								{t("admin.usersEmpty")}
+							<td colSpan={6}>
+								<EmptyState
+									message={t("admin.usersEmpty")}
+									icon={Users}
+									className="py-12"
+								/>
 							</td>
 						</tr>
 					) : null

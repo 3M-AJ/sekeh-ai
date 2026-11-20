@@ -10,7 +10,7 @@ import HistoryCard from "@/apps/user/features/chat/components/ChatHistoryCard";
 import PageTitle from "@/shared/components/layout/PageTitle";
 import Section from "@/shared/components/layout/Section";
 import EmptyState from "@/shared/components/feedback/EmptyState";
-import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
+import { ChatHistoryGridSkeleton } from "@/shared/components/feedback/Skeleton";
 
 // Hooks
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
@@ -36,12 +36,7 @@ export default function ChatHistoryPage() {
 			}
 			header={<NewChatDialog />}>
 			{isPending ? (
-				<LoadingBlock
-					variant="pulse"
-					count={10}
-					className="grid grid-cols-5 gap-5 max-[1100px]:grid-cols-3 max-md:grid-cols-1"
-					pulseClassName="h-70"
-				/>
+				<ChatHistoryGridSkeleton />
 			) : hasChats ? (
 				<div className="grid grid-cols-5 gap-5 max-[1100px]:grid-cols-3 max-md:grid-cols-1">
 					{chats.map((h) => (

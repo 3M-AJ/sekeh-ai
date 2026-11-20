@@ -11,6 +11,7 @@ import DeleteAccountDialog from "@/apps/user/features/profile/components/DeleteA
 import EditProfileDialog from "@/apps/user/features/profile/components/EditProfileDialog";
 import PageTitle from "@/shared/components/layout/PageTitle";
 import Section from "@/shared/components/layout/Section";
+import { ProfileSkeleton } from "@/shared/components/feedback/Skeleton";
 
 // Hooks
 import { useCustomQuery } from "@/shared/hooks/useCustomQuery";
@@ -24,7 +25,7 @@ export default function ProfilePage() {
 	const { getProfile } = profileAPI;
 	const { profile, setProfile } = useProfile();
 
-	const { data, refetch } = useCustomQuery({
+	const { data, refetch, isPending } = useCustomQuery({
 		key: ["prfoileInfo"],
 		func: getProfile,
 	});
@@ -34,6 +35,8 @@ export default function ProfilePage() {
 			setProfile(data.data.user);
 		}
 	}, [data?.data, setProfile]);
+
+	const showSkeleton = isPending && !profile;
 
 	return (
 		<Section
@@ -45,52 +48,58 @@ export default function ProfilePage() {
 				/>
 			}
 			header={
-				<div className="flex flex-wrap items-center gap-2">
-					<EditProfileDialog refetch={refetch} />
-					<ChangePasswordDialog />
-					<DeleteAccountDialog />
-				</div>
-			}>
-			<div className="flex flex-col gap-8 max-md:items-center">
-				<div className="flex items-center gap-5 max-md:flex-col">
-					<div className="flex size-27 shrink-0 items-center justify-center rounded-full bg-linear-30 from-accent-hover to-match">
-						<div className="flex size-25 items-center justify-center rounded-full bg-background">
-							<Sparkles className="size-15 text-accent-soft" />
-						</div>
+				showSkeleton ? null : (
+					<div className="flex flex-wrap items-center gap-2">
+						<EditProfileDialog refetch={refetch} />
+						<ChangePasswordDialog />
+						<DeleteAccountDialog />
 					</div>
-					<p className="text-4xl font-semibold text-primary-text">
-						{profile?.username}
-					</p>
-				</div>
-
-				<section className="flex w-fit flex-col gap-5 rounded-lg border border-border bg-background p-5 text-xl text-primary-text max-md:items-center">
-					<div className="flex gap-2">
-						<p className="shrink-0 font-semibold">{t("profile.emailLabel")}</p>
-						<p className="truncate overflow-hidden" dir="ltr">
-							{profile?.email}
+				)
+			}>
+			{showSkeleton ? (
+				<ProfileSkeleton />
+			) : (
+				<div className="flex flex-col gap-8 max-md:items-center">
+					<div className="flex items-center gap-5 max-md:flex-col">
+						<div className="flex size-27 shrink-0 items-center justify-center rounded-full bg-linear-30 from-accent-hover to-match">
+							<div className="flex size-25 items-center justify-center rounded-full bg-background">
+								<Sparkles className="size-15 text-accent-soft" />
+							</div>
+						</div>
+						<p className="text-4xl font-semibold text-primary-text">
+							{profile?.username}
 						</p>
 					</div>
-					<div className="flex gap-2">
-						<p className="shrink-0 font-semibold">{t("profile.phoneLabel")}</p>
-						<p>{profile?.phone_number}</p>
-					</div>
-				</section>
 
-				<footer className="flex flex-col gap-1">
-					<p className="text-sm font-medium text-text-muted">
-						{t("profile.joinedAt", {
-							date: formatDate(profile?.created_at ?? ""),
-						})}
-					</p>
-					{profile?.updated_at ? (
+					<section className="flex w-fit flex-col gap-5 rounded-lg border border-border bg-background p-5 text-xl text-primary-text max-md:items-center">
+						<div className="flex gap-2">
+							<p className="shrink-0 font-semibold">{t("profile.emailLabel")}</p>
+							<p className="truncate overflow-hidden" dir="ltr">
+								{profile?.email}
+							</p>
+						</div>
+						<div className="flex gap-2">
+							<p className="shrink-0 font-semibold">{t("profile.phoneLabel")}</p>
+							<p>{profile?.phone_number}</p>
+						</div>
+					</section>
+
+					<footer className="flex flex-col gap-1">
 						<p className="text-sm font-medium text-text-muted">
-							{t("profile.updatedAt", {
-								date: formatDate(profile.updated_at),
+							{t("profile.joinedAt", {
+								date: formatDate(profile?.created_at ?? ""),
 							})}
 						</p>
-					) : null}
-				</footer>
-			</div>
+						{profile?.updated_at ? (
+							<p className="text-sm font-medium text-text-muted">
+								{t("profile.updatedAt", {
+									date: formatDate(profile.updated_at),
+								})}
+							</p>
+						) : null}
+					</footer>
+				</div>
+			)}
 		</Section>
 	);
 }

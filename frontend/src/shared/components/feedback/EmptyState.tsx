@@ -5,24 +5,26 @@ interface EmptyStateProps {
 	message: string;
 	icon?: LucideIcon;
 	className?: string;
-	dashed?: boolean;
 }
 
+/** Shared empty state for every list/section page. */
 export default function EmptyState({
 	message,
 	icon: Icon,
 	className,
-	dashed = false,
 }: EmptyStateProps) {
 	return (
 		<div
 			className={cn(
 				"flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center",
-				dashed && "rounded-lg border border-dashed border-border",
 				className,
 			)}
 			role="status">
-			{Icon ? <Icon className="size-8 text-text-muted" aria-hidden="true" /> : null}
+			{Icon ? (
+				<div className="flex size-14 items-center justify-center rounded-full bg-surface">
+					<Icon className="size-7 text-text-muted" aria-hidden="true" />
+				</div>
+			) : null}
 			<p className="max-w-md text-text-muted">{message}</p>
 		</div>
 	);

@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 // Components
 import Message from "@/apps/user/features/chat/components/ChatMessage";
 import ResumeModal from "@/apps/user/features/resume/components/ResumePickerDialog";
+import { ChatMessagesSkeleton } from "@/shared/components/feedback/Skeleton";
 
 // Hooks
 import { useChatPage } from "@/apps/user/features/chat/hooks";
@@ -49,12 +50,7 @@ export default function ChatPage() {
 				dir="ltr"
 				onScroll={handleMessagesScroll}
 				className="scrollbar-gray flex h-full flex-col gap-10 overflow-y-auto px-5 pb-5 max-md:pt-5 md:px-[20%] md:pt-10">
-				{showLoadingMessages ? (
-					<div className="space-y-4">
-						<div className="h-24 animate-pulse rounded-xl bg-border/70" />
-						<div className="h-24 animate-pulse rounded-xl bg-border/70" />
-					</div>
-				) : null}
+				{showLoadingMessages ? <ChatMessagesSkeleton /> : null}
 				{showEmptyState ? (
 					<Message
 						message={{

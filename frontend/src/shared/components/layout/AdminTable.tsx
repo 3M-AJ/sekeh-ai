@@ -1,13 +1,14 @@
 import type { ReactNode } from "react";
 import { cn } from "@/shared/lib/cn";
-import LoadingBlock from "@/shared/components/feedback/LoadingBlock";
+import { AdminTableRowsSkeleton } from "@/shared/components/feedback/Skeleton";
 
 interface AdminTableProps {
 	headers: ReactNode;
 	children: ReactNode;
 	isPending?: boolean;
 	empty?: ReactNode;
-	colSpan?: number;
+	columns?: number;
+	hideOnMobile?: number[];
 	className?: string;
 }
 
@@ -16,7 +17,8 @@ export default function AdminTable({
 	children,
 	isPending = false,
 	empty,
-	colSpan = 6,
+	columns = 6,
+	hideOnMobile = [1, 2, 4],
 	className,
 }: AdminTableProps) {
 	return (
@@ -29,20 +31,15 @@ export default function AdminTable({
 				<thead className="bg-surface text-primary-action">
 					<tr>{headers}</tr>
 				</thead>
-				<tbody>
+				<tbody
+					aria-busy={isPending || undefined}
+					aria-label={isPending ? "Loading table" : undefined}>
 					{isPending ? (
-						Array.from({ length: 6 }).map((_, i) => (
-							<tr key={i} className="border-t border-border">
-								<td colSpan={colSpan} className="p-3">
-									<LoadingBlock
-										variant="pulse"
-										count={1}
-										pulseClassName="h-5"
-										className="gap-0"
-									/>
-								</td>
-							</tr>
-						))
+						<AdminTableRowsSkeleton
+							rows={6}
+							columns={columns}
+							hideOnMobile={hideOnMobile}
+						/>
 					) : (
 						<>
 							{children}
