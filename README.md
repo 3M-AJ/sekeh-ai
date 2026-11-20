@@ -75,7 +75,7 @@ sequenceDiagram
 
 | قابلیت | توضیح | محل مرتبط | وضعیت |
 |--------|--------|-----------|--------|
-| ثبت‌نام و ورود JWT | ثبت‌نام با نام‌کاربری و رمز؛ ورود و دریافت access/refresh | `apps/user/features/auth`، `backend-end/chat_api/routes/auth.py` | پیاده‌سازی شده |
+| ثبت‌نام و ورود JWT | ثبت‌نام با نام‌کاربری و رمز؛ ورود و دریافت access/refresh | `apps/user/features/auth`، `backend/chat_api/routes/auth.py` | پیاده‌سازی شده |
 | تمدید و خروج توکن | Refresh روی 401؛ Logout با blocklist | `shared/api/client.ts`، `auth.py`، `TokenBlocklist` | پیاده‌سازی شده |
 | پروفایل کاربر | مشاهده، ویرایش، تغییر رمز، حذف حساب | `apps/user/features/profile`، `routes/users.py` | پیاده‌سازی شده |
 | مدیریت چت | ایجاد، فهرست، حذف، تغییر عنوان | `apps/user/features/chat`، `routes/chat.py` | پیاده‌سازی شده |
@@ -158,7 +158,7 @@ sequenceDiagram
 | ابزار | محل |
 |--------|------|
 | Root `npm run dev` | `package.json` ریشه + `concurrently` |
-| npm + Vite | `front-end/` |
+| npm + Vite | `frontend/` |
 | اسکریپت بک‌اند محلی | `scripts/dev-backend.mjs` |
 | کمک‌راه‌انداز Postgres (ویندوز) | `scripts/setup-local-postgres.ps1`، `scripts/install-pgvector-and-secure.ps1` |
 | GitHub Actions Pages | `.github/workflows/deploy.yml` |
@@ -171,8 +171,8 @@ sequenceDiagram
 
 پروژه یک monorepo ساده با دو بخش اصلی است:
 
-- `front-end/`: SPA (React + Vite) با دو زیربرنامه `user` و `admin`
-- `backend-end/`: REST API + SSE (Flask)
+- `frontend/`: SPA (React + Vite) با دو زیربرنامه `user` و `admin`
+- `backend/`: REST API + SSE (Flask)
 
 در ریشه مخزن می‌توان با `npm run dev` هر دو را هم‌زمان اجرا کرد؛ همچنان امکان اجرای جداگانه نیز وجود دارد. فرانت از طریق `VITE_API_URL` به API متصل می‌شود.
 
@@ -270,9 +270,9 @@ sekeh-ai/
 │   ├── dev-backend.mjs
 │   ├── setup-local-postgres.ps1
 │   └── install-pgvector-and-secure.ps1
-├── .github/workflows/deploy.yml   # بیلد front-end و استقرار GitHub Pages
+├── .github/workflows/deploy.yml   # بیلد frontend و استقرار GitHub Pages
 ├── README.md
-├── front-end/
+├── frontend/
 │   ├── package.json
 │   ├── vite.config.ts
 │   ├── .env / .env.development / .env.production
@@ -285,7 +285,7 @@ sekeh-ai/
 │       │   └── admin/             # features، layouts، router، i18n
 │       ├── shared/                # api، components، theme، i18n، hooks، lib
 │       └── assets/
-└── backend-end/
+└── backend/
     ├── app.py
     ├── config.py
     ├── requirements.txt
@@ -334,7 +334,7 @@ npm install
 npm run dev
 ```
 
-این دستور با `concurrently` بک‌اند (`scripts/dev-backend.mjs`) و فرانت (`front-end`) را با هم اجرا می‌کند.
+این دستور با `concurrently` بک‌اند (`scripts/dev-backend.mjs`) و فرانت (`frontend`) را با هم اجرا می‌کند.
 
 برای اجرای جداگانه:
 
@@ -346,7 +346,7 @@ npm run dev:backend
 ### Backend
 
 ```bash
-cd backend-end
+cd backend
 python -m venv venv
 
 # Windows
@@ -358,7 +358,7 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-یک فایل `.env` در `backend-end/` بسازید و حداقل این متغیرها را تنظیم کنید (مقادیر باید توسط شما تأمین شوند):
+یک فایل `.env` در `backend/` بسازید و حداقل این متغیرها را تنظیم کنید (مقادیر باید توسط شما تأمین شوند):
 
 | متغیر | کاربرد |
 |--------|--------|
@@ -396,7 +396,7 @@ python app.py
 ### Frontend
 
 ```bash
-cd front-end
+cd frontend
 npm install
 ```
 
@@ -427,7 +427,7 @@ npm test
 
 ## ۷. مستندات API
 
-پایه همه مسیرها: `/api`. جزئیات بیشتر در YAMLهای `backend-end/chat_api/docs/` و UI فلَسگر موجود است.
+پایه همه مسیرها: `/api`. جزئیات بیشتر در YAMLهای `backend/chat_api/docs/` و UI فلَسگر موجود است.
 
 ### احراز هویت
 
@@ -505,7 +505,7 @@ npm test
 
 ## ۸. پایگاه‌داده و مدل‌ها
 
-مدل‌ها در `backend-end/chat_api/models/` تعریف شده‌اند.
+مدل‌ها در `backend/chat_api/models/` تعریف شده‌اند.
 
 ```mermaid
 erDiagram
@@ -706,7 +706,7 @@ erDiagram
 3. شاخه ویژگی بسازید.
 4. تغییرات را اعمال کنید (فرانت، بک‌اند یا مستندات).
 5. بررسی‌های موجود را اجرا کنید:
-   - فرانت: `npm run lint` و `npm test` داخل `front-end`
+   - فرانت: `npm run lint` و `npm test` داخل `frontend`
    - بک‌اند: در حال حاضر suite خودکار استاندارد ندارد؛ حداقل smoke دستی مسیرهای تغییر یافته
 6. Pull Request ارسال کنید.
 
@@ -728,7 +728,7 @@ erDiagram
 | `npm run dev:frontend` | فقط فرانت‌اند |
 | `npm run dev:backend` | فقط بک‌اند از طریق `scripts/dev-backend.mjs` |
 
-### دستورهای Frontend (`front-end/package.json`)
+### دستورهای Frontend (`frontend/package.json`)
 
 | دستور | کار |
 |--------|-----|
@@ -752,7 +752,7 @@ erDiagram
 
 ### استقرار Frontend
 
-با push به `main`، workflow در `.github/workflows/deploy.yml` داخل `front-end` بیلد می‌گیرد، برای SPA فایل `404.html` می‌سازد و روی GitHub Pages منتشر می‌کند. در تنظیمات مخزن، منبع Pages باید روی **GitHub Actions** باشد. آدرس مورد انتظار: `https://smartsoftwarelab.github.io/sekeh-ai/`.
+با push به `main`، workflow در `.github/workflows/deploy.yml` داخل `frontend` بیلد می‌گیرد، برای SPA فایل `404.html` می‌سازد و روی GitHub Pages منتشر می‌کند. در تنظیمات مخزن، منبع Pages باید روی **GitHub Actions** باشد. آدرس مورد انتظار: `https://smartsoftwarelab.github.io/sekeh-ai/`.
 
 ### مسائل شناخته‌شده
 

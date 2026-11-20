@@ -4,7 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const backendDir = path.join(root, "backend-end");
+const backendDir = path.join(root, "backend");
 const isWindows = process.platform === "win32";
 
 const venvPython = isWindows

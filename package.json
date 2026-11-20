@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "concurrently -k -n backend,frontend -c blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
-		"dev:frontend": "npm --prefix front-end run dev",
+		"dev:frontend": "npm --prefix frontend run dev",
 		"dev:backend": "node ./scripts/dev-backend.mjs"
 	},
 	"devDependencies": {
