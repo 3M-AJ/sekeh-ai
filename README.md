@@ -2,7 +2,7 @@
 
 # دستیار هوشمند کاریابی «سکه»
 
-مستندات فنی مخزن [smartsoftwarelab/sekeh-ai](https://github.com/smartsoftwarelab/sekeh-ai) برای توسعه‌دهندگان و مشارکت‌کنندگان.
+مستندات فنی مخزن [3M-AJ/sekeh-ai](https://github.com/3M-AJ/sekeh-ai) برای توسعه‌دهندگان و مشارکت‌کنندگان.
 
 > [!WARNING]
 > **محدودیت حیاتی زیرساخت هوش مصنوعی:** این پروژه در وضعیت فعلی فاقد زیرساخت کامل و عملیاتی برای یکپارچه‌سازی مدل‌های زبانی بزرگ (LLM) و تولید و مدیریت Embedding است. بنابراین، قابلیت‌های وابسته به هوش مصنوعی و جستجوی معنایی را نمی‌توان به‌عنوان قابلیت‌های کامل و آماده بهره‌برداری در نظر گرفت. برای توسعه و تکمیل این سامانه، لازم است مخزن پروژه Clone شده و بخش‌های مرتبط با معماری، زیرساخت هوش مصنوعی و ارتباط میان سرویس‌ها مورد بازبینی و Refactor قرار گیرند.
@@ -43,7 +43,7 @@
 | توسعه‌دهنده | Clone، اجرای محلی، تکمیل زیرساخت AI و Refactor |
 
 > [!NOTE]
-> نسخه وب روی GitHub Pages در آدرس [https://smartsoftwarelab.github.io/sekeh-ai/](https://smartsoftwarelab.github.io/sekeh-ai/) قابل دسترسی است. این میزبانی فقط فرانت‌اند استاتیک را پوشش می‌دهد؛ عملکرد وابسته به API و سرویس‌های خارجی LLM/Embedding است و بدون آن‌ها قابلیت‌های هوشمند عملیاتی نیستند.
+> نسخه وب روی GitHub Pages در آدرس [https://3M-AJ.github.io/sekeh-ai/](https://3M-AJ.github.io/sekeh-ai/) قابل دسترسی است. این میزبانی فقط فرانت‌اند استاتیک را پوشش می‌دهد؛ عملکرد وابسته به API و سرویس‌های خارجی LLM/Embedding است و بدون آن‌ها قابلیت‌های هوشمند عملیاتی نیستند.
 
 ### جریان کلی تعامل کاربر
 
@@ -318,7 +318,7 @@ sekeh-ai/
 ### Clone
 
 ```bash
-git clone https://github.com/smartsoftwarelab/sekeh-ai.git
+git clone https://github.com/3M-AJ/sekeh-ai.git
 cd sekeh-ai
 ```
 
@@ -752,7 +752,7 @@ erDiagram
 
 ### استقرار Frontend
 
-با push به `main`، workflow در `.github/workflows/deploy.yml` داخل `frontend` بیلد می‌گیرد، برای SPA فایل `404.html` می‌سازد و روی GitHub Pages منتشر می‌کند. در تنظیمات مخزن، منبع Pages باید روی **GitHub Actions** باشد. آدرس مورد انتظار: `https://smartsoftwarelab.github.io/sekeh-ai/`.
+با push به `main`، workflow در `.github/workflows/deploy.yml` داخل `frontend` بیلد می‌گیرد، برای SPA فایل `404.html` می‌سازد و روی GitHub Pages منتشر می‌کند. در تنظیمات مخزن، منبع Pages باید روی **GitHub Actions** باشد. آدرس مورد انتظار: `https://3M-AJ.github.io/sekeh-ai/`.
 
 ### مسائل شناخته‌شده
 
@@ -771,4 +771,4 @@ erDiagram
 
 این پروژه با هدف مشاوره هوشمند در زمینه کاریابی، در قالب پروژه پایانی مقطع کارشناسی توسط **محمد امینی** و **محسن محمودی** زیرنظر **آزمایشگاه نرم‌افزارهای هوشمند دانشگاه قم** توسعه یافته است.
 
-مخزن: [https://github.com/smartsoftwarelab/sekeh-ai](https://github.com/smartsoftwarelab/sekeh-ai)
+مخزن: [https://github.com/3M-AJ/sekeh-ai](https://github.com/3M-AJ/sekeh-ai)
